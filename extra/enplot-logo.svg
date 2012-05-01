@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   width="153"
+   height="55"
+   sodipodi:docname="enplot-logo.svg"
+   inkscape:export-filename="enplot-logo.png"
+   inkscape:export-xdpi="93.652443"
+   inkscape:export-ydpi="93.652443">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <filter
+       id="filter3998"
+       inkscape:label="Noisy blur"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Small-scale roughening and blurring to edges and content"
+       x="-0.25"
+       width="1.5"
+       y="-0.25"
+       height="1.5"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur4000"
+         stdDeviation="5"
+         result="result1" />
+      <feTurbulence
+         id="feTurbulence4002"
+         numOctaves="1"
+         seed="0"
+         type="fractalNoise"
+         baseFrequency="0.1"
+         result="result2" />
+      <feDisplacementMap
+         id="feDisplacementMap4004"
+         in2="result2"
+         scale="5"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         result="result3"
+         in="result1" />
+      <feComposite
+         id="feComposite4006"
+         in2="result3"
+         operator="atop" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1295"
+     inkscape:window-height="1120"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="1.9346405"
+     inkscape:cx="12.505449"
+     inkscape:cy="-17.986486"
+     inkscape:window-x="3047"
+     inkscape:window-y="278"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:126.99999809%;letter-spacing:0px;word-spacing:0px;fill:#498af4;fill-opacity:1;stroke:none;font-family:Sans"
+     x="11.006632"
+     y="39.043919"
+     id="text2987"
+     sodipodi:linespacing="127%"><tspan
+       sodipodi:role="line"
+       id="tspan2989"
+       x="11.006632"
+       y="39.043919"
+       style="font-size:46px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:126.99999809%;fill:#000000;fill-opacity:1;font-family:Sawasdee;-inkscape-font-specification:Sawasdee">enplot</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#422f3c;fill-opacity:1;stroke:none;font-family:Sans"
+     x="70.834457"
+     y="48.93243"
+     id="text2991"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan2993"
+       x="70.834457"
+       y="48.93243"
+       style="font-size:6px;font-style:italic;fill:#422f3c;fill-opacity:1;-inkscape-font-specification:Sans Italic">one-line plotting tool</tspan></text>
+  <flowRoot
+     xml:space="preserve"
+     id="flowRoot3799"
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       id="flowRegion3801"><rect
+         id="rect3803"
+         width="130.77365"
+         height="124.05405"
+         x="191.76689"
+         y="29.672297" /></flowRegion><flowPara
+       id="flowPara3805" /></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot3807"
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       id="flowRegion3809"><rect
+         id="rect3811"
+         width="210.375"
+         height="44.452702"
+         x="-38.766891"
+         y="28.638514" /></flowRegion><flowPara
+       id="flowPara3813" /></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot2999"
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Sans;font-style:normal;font-weight:normal;font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+       id="flowRegion3001"><rect
+         id="rect3003"
+         width="228.98311"
+         height="121.4696"
+         x="-38.766891"
+         y="-25.635136" /></flowRegion><flowPara
+       id="flowPara3005"></flowPara></flowRoot></svg>
