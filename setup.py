@@ -52,7 +52,7 @@ setup(
     name = "enplot",
     version = VERSION,
     packages = ['enplot'],
-    scripts = ['enplot/enplot'],
+    scripts = ['enplot/enplot', 'enplot/enplot3d'],
     include_dirs = [np.get_include()],
     author = "Robert Johansson",
     author_email = "jrjohansson@gmail.com",

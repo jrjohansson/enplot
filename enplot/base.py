@@ -13,10 +13,13 @@
 # License: LGPL
 
 from scipy import *
+import numpy as np
 
 import os
 import copy
 import sys
+
+debug = 0
 
 # ------------------------------------------------------------------------------
 # 
@@ -163,4 +166,25 @@ def file_data_read(datafile, sep=None):
     f.close()
 
     return data, M, N
+
+# ------------------------------------------------------------------------------
+# 
+#
+def build_Z(M, x_range, y_range, xcol, ycol, zcol):
+    
+    n = x_range.size
+    m = y_range.size
+
+    if debug != 0:
+        print "Building Z [" + str(n) + "x" + str(m) + "]"
+
+    Z = np.zeros((m,n), float)
+
+    for i in range(len(M[:,zcol])):
+        a = np.nonzero(x_range == M[i,xcol])[0][0]
+        b = np.nonzero(y_range == M[i,ycol])[0][0]
+        Z[b, a] = M[i,zcol]
+
+    return Z
+
 
