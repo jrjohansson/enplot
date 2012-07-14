@@ -9,4 +9,6 @@ that be used to quickly plot data in CSV format.
 Example
 -------
 
-enplot -x 0 -y 1,2 -X "time" -Y "Probabilities" qubit_population.dat 
+
+
+    enplot -x 0 -y 1,2 -X "time" -Y "Probabilities" qubit_population.dat 
