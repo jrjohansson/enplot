@@ -1,19 +1,20 @@
 #!/usr/bin/env python
-#
-# enplot: A plot tool for quickly plotting data in TSV,SSV,CSV formats from the command line.
-#
-# Requires:
-#
-#    1) python
-#    2) SciPy
-#    3) matplotlib (pylab)
-#
-# Purpose:
-#
-#    To quickly plot a data file from the command line for general inspection.
-#
-# Robert Johansson <robert@riken.jp>
-# License: LGPL
+"""
+enplot: A plot tool for quickly plotting data in TSV,SSV,CSV formats from the command line.
+
+Requires:
+
+   1) python
+   2) SciPy
+   3) matplotlib (pylab)
+
+Purpose:
+
+   To quickly plot a data file from the command line for general inspection.
+
+Robert Johansson <robert@riken.jp>
+License: LGPL
+"""
 
 from scipy import *
 from pylab import *

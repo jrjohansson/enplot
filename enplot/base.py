@@ -1,17 +1,17 @@
-#
-# enplot library: A simple library with support functions for plotting using
-# matplotlib.
-#
-# Requires:
-#
-#    1) python
-#    2) SciPy
-#    3) matplotlib
-#
-#
-# Robert Johansson <robert@riken.jp>
-# License: LGPL
+"""
+enplot library: A simple library with support functions for plotting using
+matplotlib.
 
+Requires:
+
+   1) python
+   2) SciPy
+   3) matplotlib
+
+
+Robert Johansson <robert@riken.jp>
+License: LGPL
+"""
 from scipy import *
 import numpy as np
 
@@ -25,6 +25,9 @@ debug = 0
 # 
 #
 def data_matrix_sort(M, col):
+    """
+    Sort the columns in a given matrix according to give column.
+    """
 
     MM = copy.copy(M)
 
@@ -46,6 +49,10 @@ def data_matrix_sort(M, col):
 # 
 #
 def data_matrix_read_file(filename, sep = "\t"):
+    """
+    Read a matrix from a field-separated values text file (by default tab
+    separated, but the separator can be changed by the optional second argument)
+    """
 
     N = 0
     M = 0
@@ -83,6 +90,11 @@ def data_matrix_read_file(filename, sep = "\t"):
 # Read matrix data from a file
 #
 def file_data_read(datafile, sep=None):
+    """
+    Read data from a field-separated values text file (by default tab separated,
+    but the separator can be changed by the optional second argument). Return
+    the data in matrix.
+    """
 
     if datafile == None:
         raise ValueError("datafile is unspecified")
@@ -171,7 +183,10 @@ def file_data_read(datafile, sep=None):
 # 
 #
 def build_Z(M, x_range, y_range, xcol, ycol, zcol):
-    
+    """
+    Constuct a matrix representation of data in list format.
+    """    
+
     n = x_range.size
     m = y_range.size
 
