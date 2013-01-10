@@ -16,148 +16,94 @@ Robert Johansson <robert@riken.jp>
 License: LGPL
 """
 
-from scipy import *
-from pylab import *
-import os
-import copy
-import getopt
-import sys
+#import scipy
+import enplot
 
-from enplot import *
+#
+# Configure and parse the command-line arguments
+#
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("datafile",         help="a data file in a CSV-like format", type=str, nargs='+')
+parser.add_argument("-t", "--title",          help="plot title", type=str)
+parser.add_argument("-o", "--output-file",    help="file name for output", type=str)
+parser.add_argument("-f", "--output-format",  help="file format for output", type=str)
+parser.add_argument("-x", help="column index in the data file for use as X variable", type=str)
+parser.add_argument("-y", help="comma-separated list of column index in the data file for use as Y variables", type=str)
+parser.add_argument("-X", "--x-label", help="label for use on X axis", type=str)
+parser.add_argument("-Y", "--y-label", help="label for use on Y axis", type=str)
+parser.add_argument("-l", "--legends",          help="comma-separated list of legends", type=str)
+parser.add_argument("-s", "--sort", help="sort the data by the X-axis data points", action='store_false')
+parser.add_argument("-q", "--quiet",          help="do not display plot window", action='store_true', default=False)
+parser.add_argument("-d", "--debug",          help="activate debug printouts", action='store_true', default=False)
+args = parser.parse_args()
 
-rc('text', usetex=True)
-rc('font', family='serif')
+#
+# process command-line arguemnts
+#                  
+style = ["-b", "-g", "-k", "-r"]
+style_no = len(style)
 
-def usage():
-    print "enplot [-t title] [-p plot.png] [-x xcol] [-y ycol_list] [-X x_label] [-Y y_label] [-d dim] data_files"
-    print
-    print " ycol_list:    is a comma separated list of integers which indicate which columns to plot"
-    print " data_files:    is a blank space separated list of data files to plot"
-    print
-    print "Additional options:"
-    print
-#    print " -d D        using data file delimiter D (i.e., space or \t)"
-#    print " -S sep        using data file separator sep (values 'space' or 'tab')
-    print " -s        sort the data point by the x-axis"
-    return
+xcol = int(args.x) if args.x else -1
+ycol = [int(y) for y in args.y.split(",")] if args.y else [0]
 
-try:     
-    opts, args = getopt.getopt(sys.argv[1:], "hbd:p:x:y:X:Y:t:DsS:qa:l:", ["help", "debug", "dim=", "plot=", "xcol=", "ycol", "xlbl","ylbl=", "title=", "dots", "sort", "scale", "quiet", "style=", "legend="]) 
+# 
+# Use matplotlib to create the plot
+#
 
-except getopt.GetoptError:     
-    usage()  
-    sys.exit(2)                     
+import matplotlib
+matplotlib.rcParams['font.size'] = 12
+matplotlib.rcParams['font.family'] = 'serif'
+matplotlib.rcParams['text.usetex'] = True
+import pylab as plt
 
-# Defaults
-legend_str = ""
-style_str  = ""
+fig, axes = plt.subplots(1, 1, figsize=(8,6))
 
-plot_file = ""
-data_files = 0 
-xcol = -1
-ycol = [1]
-xlbl = "x"
-ylbl = "y"
-yscale = 1
-debug = 0
-dim = "\t"
-title_text = ""
-style = ("-b", "-g", "-k", "-r")
-style_no = 4
-sort_flag = 0 
-quiet = 0
-
-# parse command line arguments
-for opt, arg in opts:                
-    if opt in ("-h", "--help"):      
-        usage()                     
-        sys.exit()                  
-    elif opt in ("-p", "--plot"): 
-        plot_file = arg   
-    elif opt in ("-x", "--xcol"): 
-        xcol = int(arg)     
-    elif opt in ("-y", "--ycol"): 
-        ycol = arg.split(",")
-    elif opt in ("-X", "--xlbl"): 
-        xlbl = arg     
-    elif opt in ("-Y", "--xlbl"): 
-        ylbl = arg     
-    elif opt in ("-Y", "--xlbl"): 
-        ylbl = arg     
-    elif opt in ("-d", "--dim"): 
-        dim = arg 
-    elif opt in ("-t", "--title"): 
-        title_text = arg     
-    elif opt in ("-l", "--legend"): 
-        legend_str = arg     
-    elif opt in ("--style"): 
-        style_str = arg     
-    elif opt in ("-S", "--separator"): 
-        if arg == "space":
-            dim = " "
-        elif arg == "tab":
-            dim = "\t"
-    elif opt in ("-D", "--dots"): 
-        style = (".r", ".b", ".g", ".k")
-    elif opt in ("-s", "--sort"): 
-        sort_flag = 1
-    elif opt in ("-d", "--debug"): 
-        debug = 1
-    elif opt in ("-q", "--quiet"):
-        quiet = 1
-
-
-if style_str and (style_str) > 0:
-    style = style_str.split(":")
-
-data_files = args
-
-if len(data_files) < 1:
-    usage()
-    sys.exit()
-
-if debug:
-    print "Plot data in", data_files, "and store in", plot_file
-    print " - plot column", str(xcol), "vs columns",ycol
-    print " - label them", xlbl, "vs", ylbl
-
-
-# ------------------------------------------------------------------------------
-# Read matrix data from a file
+# 
+# Read and process the data from a files. 
 #
 si = 0
-for data_file in data_files:
+for data_file in args.datafile:
 
-    if debug != 0:
+    if args.debug:
         print "Processing data file ", data_file
 
-    M, m, n = file_data_read(data_file)
+    M, m, n = enplot.file_data_read(data_file)
 
-    if sort_flag == 1:
-        M = matrix_sort(M, xcol)
+    if args.sort:
+        M = enplot.data_matrix_sort(M, xcol)
 
     for i in ycol:
-        if int(i) < int(n):
+        if i < n:
             if xcol != -1:
-                plot(M[:,xcol], M[:,int(i)] * yscale, style[si % style_no])
+                axes.plot(M[:,xcol], M[:,int(i)], style[si % style_no])
             else:
-                plot(M[:,int(i)] * yscale, style[si % style_no])
+                axes.plot(M[:,int(i)], style[si % style_no])
             si = si + 1
         else:
             print "The data file", data_file, ": column", i, "does not exist.", n
 
-if len(title_text) > 0:
-    title(title_text)
+#
+# Add plot title, labels and legend
+#
+if args.title and len(args.title) > 0:
+    axes.set_title(args.title)
 
-xlabel(xlbl)
-ylabel(ylbl)
+if args.x_label and len(args.x_label) > 0:
+    axes.set_xlabel(args.x_label)
 
-if legend_str and (legend_str) > 0:
-    legend(legend_str.split(":"))
+if args.y_label and len(args.y_label) > 0:
+    axes.set_ylabel(args.y_label)
+
+if args.legends and len(args.legends) > 0:
+    axes.legend(args.legends.split(","))
     
-if len(plot_file) > 0:
-    savefig(plot_file)
+#
+# save and/or display figure
+#
+if args.output_file and len(args.output_file):
+    fig.savefig(args.output_file)
         
-if (quiet == 0):
-    show()
+if not args.quiet:
+    plt.show()
 
