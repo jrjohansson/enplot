@@ -17,115 +17,47 @@ Robert Johansson <robert@riken.jp>
 License: LGPL
 """
 
-from scipy import *
-from pylab import *
-import numpy as np
+import numpy
+import enplot
 
+#
+# Configure and parse the command-line arguments
+#
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("datafile",         help="a data file in a CSV-like format", type=str, nargs='+')
+parser.add_argument("-t", "--title",          help="plot title", type=str)
+parser.add_argument("-o", "--output-file",    help="file name for output", type=str)
+parser.add_argument("-f", "--output-format",  help="file format for output", type=str)
+parser.add_argument("-x", help="column index in the data file for use as X variable", type=str)
+parser.add_argument("-y", help="comma-separated list of column index in the data file for use as Y variables", type=str)
+parser.add_argument("-z", help="comma-separated list of column index in the data file for use as Z variables", type=str)
+parser.add_argument("-X", "--x-label",        help="label for use on X axis", type=str)
+parser.add_argument("-Y", "--y-label",        help="label for use on Y axis", type=str)
+parser.add_argument("-Z", "--z-label",        help="label for use on Z axis", type=str)
+parser.add_argument("-l", "--legends",        help="comma-separated list of legends", type=str)
+parser.add_argument("-s", "--sort",           help="sort the data by the X-axis data points", action='store_false')
+parser.add_argument("-q", "--quiet",          help="do not display plot window", action='store_true', default=False)
+parser.add_argument("-d", "--debug",          help="activate debug printouts", action='store_true', default=False)
+parser.add_argument("-v", "--view",           help="view perspective (top or 3d)", type=str)
+args = parser.parse_args()
+
+#
+# process command-line arguemnts
+#                  
+style = ["-b", "-g", "-k", "-r"]
+style_no = len(style)
+
+xcol = int(args.x) if args.x else 0
+ycol = int(args.y) if args.y else 1
+zcols = [int(z) for z in args.z.split(",")] if args.z else [0]
+
+#
+#
+#
 from matplotlib import pyplot, mpl,cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import rcParams
-
-import os
-import copy
-import getopt
-import sys
-
-from enplot import *
-
-def usage():
-    print "enplot3d [-v view] [-t title] [-p plot.png] [-x xcol] [-y ycol] [-z zcol_list] [-X x_label] [-Y y_label] [-Z z_label] [-d dim] data_files"
-    print
-    print " zcol_list:    is a comma separated list of integers which indicate which columns to plot on the z axis"
-    print " data_files:   is a blank space separated list of data files to plot"
-    print
-    print "Additional options:"
-    print
-#    print " -d D        using data file delimiter D (i.e., space or \t)"
-#    print " -S sep        using data file separator sep (values 'space' or 'tab')
-    print " -s        sort the data point by the x-axis"
-    return
-
-try:     
-    opts, args = getopt.getopt(sys.argv[1:], "hbd:p:x:y:z:Z:X:Y:t:DsS:qv:", ["help", "debug", "dim=", "plot=", "xcol=", "ycol=", "zcol=", "zlbl=", "xlbl=","ylbl=", "title=", "dots", "sort", "scale", "quiet", "view"]) 
-
-except getopt.GetoptError:     
-    usage()  
-    sys.exit(2)                     
-
-# Defaults
-plot_file = ""
-plot_view = "3d"
-data_files = 0 
-xcol  = -1
-ycol  = -1
-zcols = [1]
-xlbl = "x"
-ylbl = "y"
-zlbl = "y"
-yscale = 1
-debug = 1
-dim = "\t"
-title_text = ""
-style = ("-b", "-g", "-k", "-r")
-style_no = 4
-sort_flag = 0 
-quiet = 0
-
-# parse command line arguments
-for opt, arg in opts:                
-    if opt in ("-h", "--help"):      
-        usage()                     
-        sys.exit()                  
-    elif opt in ("-p", "--plot"): 
-        plot_file = arg   
-    elif opt in ("-x", "--xcol"): 
-        xcol  = int(arg)     
-    elif opt in ("-y", "--ycol"): 
-        ycol  = int(arg)
-    elif opt in ("-z", "--zcol"): 
-        zcols = arg.split(",")
-    elif opt in ("-Z", "--zlbl"): 
-        zlbl = arg     
-    elif opt in ("-X", "--xlbl"): 
-        xlbl = arg     
-    elif opt in ("-Y", "--ylbl"): 
-        ylbl = arg     
-    elif opt in ("-Z", "--zlbl"): 
-        zlbl = arg     
-    elif opt in ("-d", "--dim"): 
-        dim = arg 
-    elif opt in ("-t", "--title"): 
-        title_text = arg     
-    elif opt in ("-S", "--separator"):
-        if arg == "space":
-            dim = " "
-        elif arg == "tab":
-            dim = "\t"
-    elif opt in ("-D", "--dots"): 
-        style = (".r", ".b", ".g", ".k")
-    elif opt in ("-s", "--sort"): 
-        sort_flag = 1
-    elif opt in ("-d", "--debug"): 
-        debug = 1
-    elif opt in ("-q", "--quiet"):
-        quiet = 1
-    elif opt in ("-v", "--view"):
-        plot_view = arg     
-
-
-data_files = args
-
-if len(data_files) < 1:
-    usage()
-    sys.exit()
-
-if debug != 0:
-    print "Plot data in", data_files, "and store in", plot_file
-    print " - plot column", zcols, "vs columns X",xcol,"and Y",ycol
-
-#
-#
-#
 
 params = {'backend':        'ps',
           'axes.labelsize':  18,
@@ -134,87 +66,85 @@ params = {'backend':        'ps',
           'xtick.labelsize': 18,
           'ytick.labelsize': 18,
           'text.usetex':     True}
-#          'figure.figsize': fig_size}
+
 rcParams.update(params)
 
-#for data_file in data_files:
-data_file = data_files[0]
+import pylab as plt
 
-fig = figure(1, figsize=(12.0,6.0))
-nfigs = len(zcols)
-fig_cols = ceil(nfigs/sqrt(nfigs))
-fig_rows = ceil(nfigs/fig_cols)
+fig = plt.figure(figsize=(8,8))
 
-fig_idx = 1
+nax = len(zcols)
+ax_cols = numpy.ceil(nax/numpy.sqrt(nax))
+ax_rows = numpy.ceil(nax/ax_cols)
 
-#M, n, m = read_matrix_file(data_file, dim)
-M, m, n = file_data_read(data_file)
+#
+#
+#
+for data_file in args.datafile:
 
-if sort_flag == 1:
-    M = matrix_sort(M, xcol)
+    ax_idx = 1
 
-x_range = np.sort(np.unique(M[:,xcol]))
-y_range = np.sort(np.unique(M[:,ycol]))
+    M, m, n = enplot.file_data_read(data_file)
 
-X, Y = np.meshgrid(x_range, y_range)
+    if args.sort:
+        M = enplot.data_matrix_sort(M, xcol)
 
-for zcol in zcols:
+    x_range = numpy.sort(numpy.unique(M[:,xcol]))
+    y_range = numpy.sort(numpy.unique(M[:,ycol]))
 
-    if debug != 0:
-        print "Processing z column", zcol, "data file ", data_file
+    X, Y = numpy.meshgrid(x_range, y_range)
 
-    Z = build_Z(M, x_range, y_range, xcol, ycol, zcol)
+    for zcol in zcols:
 
-    if debug != 0:
-        print "Setup plots"
+        if args.debug:
+            print "Processing z column", zcol, "data file ", data_file
 
+        Z = enplot.build_Z(M, x_range, y_range, xcol, ycol, zcol)
 
-    if plot_view == "3d":
-        ax = fig.add_subplot(fig_rows, fig_cols, fig_idx, projection='3d') #/,azim=-90, elev=-90)
-        surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet, linewidth=0, antialiased=False)
-        #surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, facecolors=cm.jet, linewidth=0, antialiased=True)
- 
-    else:
-        ax = fig.add_subplot(fig_rows, fig_cols, fig_idx)
-        #subplot(fig_rows, fig_cols, fig_idx)
-        #set_cmap('hot')
-        c = ax.pcolor(X, Y, Z, antialiased=False)
-	    #cax = ax.imshow(Z, interpolation='gaussian', aspect='equal', extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
-        #pcolor(X, Y, Z, antialiased=True)
-        #cbar = colorbar(ax)
+        if args.view == "3d":
+            ax = fig.add_subplot(ax_rows, ax_cols, ax_idx, projection='3d') #/,azim=-90, elev=-90)
+            surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet, linewidth=0, antialiased=False)
+            #surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, facecolors=cm.jet, linewidth=0, antialiased=True)
+     
+        else:
+            ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
+            #subplot(ax_rows, ax_cols, ax_idx)
+            #set_cmap('hot')
+            c = ax.pcolor(X, Y, Z, antialiased=False)
+	        #cax = ax.imshow(Z, interpolation='gaussian', aspect='equal', extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
+            #pcolor(X, Y, Z, antialiased=True)
+            #cbar = colorbar(ax)
 
-        #pcolor(X, Y, N_vec, cmap=get_cmap('PuBu'))
-        #cbar = colorbar(c,ax=ax)
-        #cbar.set_clabel("$"+zlbl+"$")
+            #pcolor(X, Y, N_vec, cmap=get_cmap('PuBu'))
+            #cbar = colorbar(c,ax=ax)
+            #cbar.set_clabel("$"+zlbl+"$")
 
-    ax.autoscale(tight=True)
+        ax.autoscale(tight=True)
 
-    if len(title_text) > 0:
-        ax.title("$"+title_text+"$")
+    #
+    # Add plot title, labels and legend
+    #
+    if args.title and len(args.title) > 0:
+        ax.set_title(args.title)
 
-    if len(xlbl) > 0:
-        ax.set_xlabel("$"+xlbl+"$")
-    else:
-        ax.set_xlabel("$x$")
-    
-    if len(ylbl) > 0:
-        ax.set_ylabel("$"+ylbl+"$")
-    else:
-        ax.set_ylabel("$y$")
+    if args.x_label and len(args.x_label) > 0:
+        ax.set_xlabel(args.x_label)
 
-    fig_idx = fig_idx + 1
+    if args.y_label and len(args.y_label) > 0:
+        ax.set_ylabel(args.y_label)
 
-if debug != 0:
-    print "Show plots"
+    if args.legends and len(args.legends) > 0:
+        ax.legend(args.legends.split(","))
 
-#plt.colorbar()
-show()
+    ax_idx = ax_idx + 1
 
-if len(plot_file) > 0:
-    savefig(plot_file)
-
-if debug != 0:
-    print "done"
-
+#
+# save and/or display figure
+#
+if args.output_file and len(args.output_file):
+    fig.savefig(args.output_file)
+        
+if not args.quiet:
+    plt.show()
 
 
