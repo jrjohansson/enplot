@@ -16,7 +16,7 @@ Robert Johansson <robert@riken.jp>
 License: LGPL
 """
 
-#import scipy
+# import scipy
 import enplot
 
 #
@@ -24,30 +24,38 @@ import enplot
 #
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("datafile",         help="a data file in a CSV-like format", type=str, nargs='+')
-parser.add_argument("-t", "--title",          help="plot title", type=str)
-parser.add_argument("-o", "--output-file",    help="file name for output", type=str)
-parser.add_argument("-f", "--output-format",  help="file format for output", type=str)
+parser.add_argument(
+    "datafile", help="a data file in a CSV-like format", type=str, nargs='+')
+parser.add_argument("-t", "--title", help="plot title", type=str)
+parser.add_argument(
+    "-o", "--output-file", help="file name for output", type=str)
+parser.add_argument(
+    "-f", "--output-format", help="file format for output", type=str)
 parser.add_argument("-x", help="column index in the data file for use as X variable", type=str)
 parser.add_argument("-y", help="comma-separated list of column index in the data file for use as Y variables", type=str)
-parser.add_argument("-X", "--x-label", help="label for use on X axis", type=str)
-parser.add_argument("-Y", "--y-label", help="label for use on Y axis", type=str)
-parser.add_argument("-l", "--legends",          help="comma-separated list of legends", type=str)
+parser.add_argument(
+    "-X", "--x-label", help="label for use on X axis", type=str)
+parser.add_argument(
+    "-Y", "--y-label", help="label for use on Y axis", type=str)
+parser.add_argument("-l", "--legends",
+                    help="comma-separated list of legends", type=str)
 parser.add_argument("-s", "--sort", help="sort the data by the X-axis data points", action='store_false')
-parser.add_argument("-q", "--quiet",          help="do not display plot window", action='store_true', default=False)
-parser.add_argument("-d", "--debug",          help="activate debug printouts", action='store_true', default=False)
+parser.add_argument("-q", "--quiet", help="do not display plot window",
+                    action='store_true', default=False)
+parser.add_argument("-d", "--debug", help="activate debug printouts",
+                    action='store_true', default=False)
 args = parser.parse_args()
 
 #
 # process command-line arguemnts
-#                  
+#
 style = ["-b", "-g", "-k", "-r"]
 style_no = len(style)
 
 xcol = int(args.x) if args.x else -1
 ycol = [int(y) for y in args.y.split(",")] if args.y else [0]
 
-# 
+#
 # Use matplotlib to create the plot
 #
 
@@ -57,10 +65,10 @@ matplotlib.rcParams['font.family'] = 'serif'
 matplotlib.rcParams['text.usetex'] = True
 import pylab as plt
 
-fig, axes = plt.subplots(1, 1, figsize=(8,6))
+fig, axes = plt.subplots(1, 1, figsize=(8, 6))
 
-# 
-# Read and process the data from a files. 
+#
+# Read and process the data from a files.
 #
 si = 0
 for data_file in args.datafile:
@@ -76,9 +84,9 @@ for data_file in args.datafile:
     for i in ycol:
         if i < n:
             if xcol != -1:
-                axes.plot(M[:,xcol], M[:,int(i)], style[si % style_no])
+                axes.plot(M[:, xcol], M[:, int(i)], style[si % style_no])
             else:
-                axes.plot(M[:,int(i)], style[si % style_no])
+                axes.plot(M[:, int(i)], style[si % style_no])
             si = si + 1
         else:
             print "The data file", data_file, ": column", i, "does not exist.", n
@@ -97,13 +105,12 @@ if args.y_label and len(args.y_label) > 0:
 
 if args.legends and len(args.legends) > 0:
     axes.legend(args.legends.split(","))
-    
+
 #
 # save and/or display figure
 #
 if args.output_file and len(args.output_file):
     fig.savefig(args.output_file)
-        
+
 if not args.quiet:
     plt.show()
-

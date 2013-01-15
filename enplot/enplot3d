@@ -25,26 +25,36 @@ import enplot
 #
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("datafile",         help="a data file in a CSV-like format", type=str, nargs='+')
-parser.add_argument("-t", "--title",          help="plot title", type=str)
-parser.add_argument("-o", "--output-file",    help="file name for output", type=str)
-parser.add_argument("-f", "--output-format",  help="file format for output", type=str)
+parser.add_argument(
+    "datafile", help="a data file in a CSV-like format", type=str, nargs='+')
+parser.add_argument("-t", "--title", help="plot title", type=str)
+parser.add_argument(
+    "-o", "--output-file", help="file name for output", type=str)
+parser.add_argument(
+    "-f", "--output-format", help="file format for output", type=str)
 parser.add_argument("-x", help="column index in the data file for use as X variable", type=str)
 parser.add_argument("-y", help="comma-separated list of column index in the data file for use as Y variables", type=str)
 parser.add_argument("-z", help="comma-separated list of column index in the data file for use as Z variables", type=str)
-parser.add_argument("-X", "--x-label",        help="label for use on X axis", type=str)
-parser.add_argument("-Y", "--y-label",        help="label for use on Y axis", type=str)
-parser.add_argument("-Z", "--z-label",        help="label for use on Z axis", type=str)
-parser.add_argument("-l", "--legends",        help="comma-separated list of legends", type=str)
-parser.add_argument("-s", "--sort",           help="sort the data by the X-axis data points", action='store_false')
-parser.add_argument("-q", "--quiet",          help="do not display plot window", action='store_true', default=False)
-parser.add_argument("-d", "--debug",          help="activate debug printouts", action='store_true', default=False)
-parser.add_argument("-v", "--view",           help="view perspective (top or 3d)", type=str)
+parser.add_argument(
+    "-X", "--x-label", help="label for use on X axis", type=str)
+parser.add_argument(
+    "-Y", "--y-label", help="label for use on Y axis", type=str)
+parser.add_argument(
+    "-Z", "--z-label", help="label for use on Z axis", type=str)
+parser.add_argument("-l", "--legends",
+                    help="comma-separated list of legends", type=str)
+parser.add_argument("-s", "--sort", help="sort the data by the X-axis data points", action='store_false')
+parser.add_argument("-q", "--quiet", help="do not display plot window",
+                    action='store_true', default=False)
+parser.add_argument("-d", "--debug", help="activate debug printouts",
+                    action='store_true', default=False)
+parser.add_argument(
+    "-v", "--view", help="view perspective (top or 3d)", type=str)
 args = parser.parse_args()
 
 #
 # process command-line arguemnts
-#                  
+#
 style = ["-b", "-g", "-k", "-r"]
 style_no = len(style)
 
@@ -55,27 +65,27 @@ zcols = [int(z) for z in args.z.split(",")] if args.z else [0]
 #
 #
 #
-from matplotlib import pyplot, mpl,cm
+from matplotlib import pyplot, mpl, cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import rcParams
 
-params = {'backend':        'ps',
-          'axes.labelsize':  18,
-          'text.fontsize':   18,
+params = {'backend': 'ps',
+          'axes.labelsize': 18,
+          'text.fontsize': 18,
           'legend.fontsize': 18,
           'xtick.labelsize': 18,
           'ytick.labelsize': 18,
-          'text.usetex':     True}
+          'text.usetex': True}
 
 rcParams.update(params)
 
 import pylab as plt
 
-fig = plt.figure(figsize=(8,8))
+fig = plt.figure(figsize=(8, 8))
 
 nax = len(zcols)
-ax_cols = numpy.ceil(nax/numpy.sqrt(nax))
-ax_rows = numpy.ceil(nax/ax_cols)
+ax_cols = numpy.ceil(nax / numpy.sqrt(nax))
+ax_rows = numpy.ceil(nax / ax_cols)
 
 #
 #
@@ -89,8 +99,8 @@ for data_file in args.datafile:
     if args.sort:
         M = enplot.data_matrix_sort(M, xcol)
 
-    x_range = numpy.sort(numpy.unique(M[:,xcol]))
-    y_range = numpy.sort(numpy.unique(M[:,ycol]))
+    x_range = numpy.sort(numpy.unique(M[:, xcol]))
+    y_range = numpy.sort(numpy.unique(M[:, ycol]))
 
     X, Y = numpy.meshgrid(x_range, y_range)
 
@@ -102,22 +112,25 @@ for data_file in args.datafile:
         Z = enplot.build_Z(M, x_range, y_range, xcol, ycol, zcol)
 
         if args.view == "3d":
-            ax = fig.add_subplot(ax_rows, ax_cols, ax_idx, projection='3d') #/,azim=-90, elev=-90)
-            surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet, linewidth=0, antialiased=False)
-            #surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, facecolors=cm.jet, linewidth=0, antialiased=True)
-     
+            ax = fig.add_subplot(ax_rows, ax_cols, ax_idx,
+                                 projection='3d')  # /,azim=-90, elev=-90)
+            surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,
+                                   linewidth=0, antialiased=False)
+            # surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+            # facecolors=cm.jet, linewidth=0, antialiased=True)
+
         else:
             ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
-            #subplot(ax_rows, ax_cols, ax_idx)
-            #set_cmap('hot')
+            # subplot(ax_rows, ax_cols, ax_idx)
+            # set_cmap('hot')
             c = ax.pcolor(X, Y, Z, antialiased=False)
-	        #cax = ax.imshow(Z, interpolation='gaussian', aspect='equal', extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
-            #pcolor(X, Y, Z, antialiased=True)
-            #cbar = colorbar(ax)
+                # cax = ax.imshow(Z, interpolation='gaussian', aspect='equal', extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
+            # pcolor(X, Y, Z, antialiased=True)
+            # cbar = colorbar(ax)
 
-            #pcolor(X, Y, N_vec, cmap=get_cmap('PuBu'))
-            #cbar = colorbar(c,ax=ax)
-            #cbar.set_clabel("$"+zlbl+"$")
+            # pcolor(X, Y, N_vec, cmap=get_cmap('PuBu'))
+            # cbar = colorbar(c,ax=ax)
+            # cbar.set_clabel("$"+zlbl+"$")
 
         ax.autoscale(tight=True)
 
@@ -143,8 +156,6 @@ for data_file in args.datafile:
 #
 if args.output_file and len(args.output_file):
     fig.savefig(args.output_file)
-        
+
 if not args.quiet:
     plt.show()
-
-
