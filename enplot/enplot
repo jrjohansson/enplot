@@ -24,22 +24,30 @@ import enplot
 #
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "datafile", help="a data file in a CSV-like format", type=str, nargs='+')
-parser.add_argument("-t", "--title", help="plot title", type=str)
-parser.add_argument(
-    "-o", "--output-file", help="file name for output", type=str)
-parser.add_argument(
-    "-f", "--output-format", help="file format for output", type=str)
-parser.add_argument("-x", help="column index in the data file for use as X variable", type=str)
-parser.add_argument("-y", help="comma-separated list of column index in the data file for use as Y variables", type=str)
-parser.add_argument(
-    "-X", "--x-label", help="label for use on X axis", type=str)
-parser.add_argument(
-    "-Y", "--y-label", help="label for use on Y axis", type=str)
+parser.add_argument("datafile",
+                    help="a data file in a CSV-like format",
+                    type=str, nargs='+')
+parser.add_argument("-t", "--title",
+                    help="plot title", type=str)
+parser.add_argument("-o", "--output-file",
+                    help="file name for output", type=str)
+parser.add_argument("-f", "--output-format",
+                    help="file format for output", type=str)
+parser.add_argument("-x",
+                    help="column index in the data file for use as X variable",
+                    type=str)
+parser.add_argument("-y",
+                    help=("comma-separated list of column index in " +
+                          "the data file for use as Y variables"), type=str)
+parser.add_argument("-X", "--x-label", 
+                    help="label for use on X axis", type=str)
+parser.add_argument("-Y", "--y-label", 
+                    help="label for use on Y axis", type=str)
 parser.add_argument("-l", "--legends",
                     help="comma-separated list of legends", type=str)
-parser.add_argument("-s", "--sort", help="sort the data by the X-axis data points", action='store_false')
+parser.add_argument("-s", "--sort",
+                    help="sort the data by the X-axis data points",
+                    action='store_false')
 parser.add_argument("-q", "--quiet", help="do not display plot window",
                     action='store_true', default=False)
 parser.add_argument("-d", "--debug", help="activate debug printouts",

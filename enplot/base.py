@@ -176,7 +176,7 @@ def file_data_read(datafile, sep=None):
     return data, M, N
 
 
-def build_Z(M, x_range, y_range, xcol, ycol, zcol):
+def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
     """
     Constuct a matrix representation of data in list format.
     """

@@ -48,8 +48,10 @@ parser.add_argument("-q", "--quiet", help="do not display plot window",
                     action='store_true', default=False)
 parser.add_argument("-d", "--debug", help="activate debug printouts",
                     action='store_true', default=False)
-parser.add_argument(
-    "-v", "--view", help="view perspective (top or 3d)", type=str)
+parser.add_argument("-v", "--view", 
+                    help="view perspective (top or 3d)", type=str)
+parser.add_argument("-c", "--colorbar", 
+                    help="Show colorbar", action='store_true')
 args = parser.parse_args()
 
 #
@@ -109,7 +111,7 @@ for data_file in args.datafile:
         if args.debug:
             print "Processing z column", zcol, "data file ", data_file
 
-        Z = enplot.build_Z(M, x_range, y_range, xcol, ycol, zcol)
+        Z = enplot.build_matrix(M, x_range, y_range, xcol, ycol, zcol)
 
         if args.view == "3d":
             ax = fig.add_subplot(ax_rows, ax_cols, ax_idx,
@@ -123,14 +125,18 @@ for data_file in args.datafile:
             ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
             # subplot(ax_rows, ax_cols, ax_idx)
             # set_cmap('hot')
-            c = ax.pcolor(X, Y, Z, antialiased=False)
-                # cax = ax.imshow(Z, interpolation='gaussian', aspect='equal', extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
+            p = ax.pcolor(X, Y, Z, antialiased=False, cmap=cm.RdBu)
+            # cax = ax.imshow(Z, interpolation='gaussian', aspect='equal',
+            # extent=[min(X[0,:]),max(X[0,:]),min(Y[:,0]),max(Y[:,0])])
             # pcolor(X, Y, Z, antialiased=True)
             # cbar = colorbar(ax)
 
             # pcolor(X, Y, N_vec, cmap=get_cmap('PuBu'))
             # cbar = colorbar(c,ax=ax)
             # cbar.set_clabel("$"+zlbl+"$")
+
+            if args.colorbar:
+                cb = fig.colorbar(p)
 
         ax.autoscale(tight=True)
 
