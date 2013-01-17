@@ -17,6 +17,7 @@ License: LGPL
 """
 
 # import scipy
+import numpy
 import enplot
 
 #
@@ -39,10 +40,15 @@ parser.add_argument("-x",
 parser.add_argument("-y",
                     help=("comma-separated list of column index in " +
                           "the data file for use as Y variables"), type=str)
+parser.add_argument("-z",
+                    help=("comma-separated list of column index in " +
+                          "the data file for use as Y variables"), type=str)
 parser.add_argument("-X", "--x-label", 
                     help="label for use on X axis", type=str)
 parser.add_argument("-Y", "--y-label", 
                     help="label for use on Y axis", type=str)
+parser.add_argument("-Z", "--z-label", 
+                    help="label for use on Z axis", type=str)
 parser.add_argument("-l", "--legends",
                     help="comma-separated list of legends", type=str)
 parser.add_argument("-s", "--sort",
@@ -52,6 +58,10 @@ parser.add_argument("-q", "--quiet", help="do not display plot window",
                     action='store_true', default=False)
 parser.add_argument("-d", "--debug", help="activate debug printouts",
                     action='store_true', default=False)
+parser.add_argument("-v", "--view", 
+                    help="view perspective (top or 3d)", type=str)
+parser.add_argument("-c", "--colorbar", 
+                    help="Show colorbar", action='store_true')
 args = parser.parse_args()
 
 #
@@ -60,8 +70,13 @@ args = parser.parse_args()
 style = ["-b", "-g", "-k", "-r"]
 style_no = len(style)
 
-xcol = int(args.x) if args.x else -1
-ycol = [int(y) for y in args.y.split(",")] if args.y else [0]
+if not args.z:
+    xcol = int(args.x) if args.x else -1
+    ycols = [int(y) for y in args.y.split(",")] if args.y else [0]
+else:
+    xcol = int(args.x) if args.x else 0
+    ycol = int(args.y) if args.y else 1
+    zcols = [int(z) for z in args.z.split(",")] if args.z else [0]
 
 #
 # Use matplotlib to create the plot
@@ -71,48 +86,131 @@ import matplotlib
 matplotlib.rcParams['font.size'] = 12
 matplotlib.rcParams['font.family'] = 'serif'
 matplotlib.rcParams['text.usetex'] = True
+from matplotlib import pyplot, mpl, cm, rcParams
+from mpl_toolkits.mplot3d import Axes3D
+
+params = {'backend': 'ps',
+          'axes.labelsize': 18,
+          'text.fontsize': 18,
+          'legend.fontsize': 18,
+          'xtick.labelsize': 18,
+          'ytick.labelsize': 18,
+          'text.usetex': True}
+#rcParams.update(params)
 import pylab as plt
 
-fig, axes = plt.subplots(1, 1, figsize=(8, 6))
 
 #
 # Read and process the data from a files.
 #
-si = 0
-for data_file in args.datafile:
 
-    if args.debug:
-        print "Processing data file ", data_file
+if not args.z:
+    #
+    # 2d plot
+    #
+    fig, axes = plt.subplots(1, 1, figsize=(8, 6))
 
-    M, m, n = enplot.file_data_read(data_file)
+    si = 0
+    for data_file in args.datafile:
 
-    if args.sort:
-        M = enplot.data_matrix_sort(M, xcol)
+        if args.debug:
+            print "Processing data file ", data_file
 
-    for i in ycol:
-        if i < n:
-            if xcol != -1:
-                axes.plot(M[:, xcol], M[:, int(i)], style[si % style_no])
+        M, m, n = enplot.file_data_read(data_file)
+
+        if args.sort:
+            M = enplot.data_matrix_sort(M, xcol)
+
+        for i in ycols:
+            if i < n:
+                if xcol != -1:
+                    axes.plot(M[:, xcol], M[:, int(i)], style[si % style_no])
+                else:
+                    axes.plot(M[:, int(i)], style[si % style_no])
+                si = si + 1
             else:
-                axes.plot(M[:, int(i)], style[si % style_no])
-            si = si + 1
-        else:
-            print "The data file", data_file, ": column", i, "does not exist.", n
+                print "The data file", data_file, ": column", i, "does not exist.", n
 
-#
-# Add plot title, labels and legend
-#
-if args.title and len(args.title) > 0:
-    axes.set_title(args.title)
+    #
+    # Add plot title, labels and legend
+    #
+    if args.title and len(args.title) > 0:
+        axes.set_title(args.title)
 
-if args.x_label and len(args.x_label) > 0:
-    axes.set_xlabel(args.x_label)
+    if args.x_label and len(args.x_label) > 0:
+        axes.set_xlabel(args.x_label)
 
-if args.y_label and len(args.y_label) > 0:
-    axes.set_ylabel(args.y_label)
+    if args.y_label and len(args.y_label) > 0:
+        axes.set_ylabel(args.y_label)
 
-if args.legends and len(args.legends) > 0:
-    axes.legend(args.legends.split(","))
+    if args.legends and len(args.legends) > 0:
+        axes.legend(args.legends.split(","))
+
+else:
+    #
+    # 3D plots
+    #
+    fig = plt.figure(figsize=(8, 8))
+
+    nax = len(zcols)
+    ax_cols = numpy.ceil(nax / numpy.sqrt(nax))
+    ax_rows = numpy.ceil(nax / ax_cols)
+
+    #
+    #
+    #
+    for data_file in args.datafile:
+
+        ax_idx = 1
+
+        M, m, n = enplot.file_data_read(data_file)
+
+        if args.sort:
+            M = enplot.data_matrix_sort(M, xcol)
+
+        x_range = numpy.sort(numpy.unique(M[:, xcol]))
+        y_range = numpy.sort(numpy.unique(M[:, ycol]))
+
+        X, Y = numpy.meshgrid(x_range, y_range)
+
+        for zcol in zcols:
+
+            if args.debug:
+                print "Processing z column", zcol, "data file ", data_file
+
+            Z = enplot.build_matrix(M, x_range, y_range, xcol, ycol, zcol)
+
+            if args.view == "3d":
+                ax = fig.add_subplot(ax_rows, ax_cols, ax_idx, projection='3d') 
+                # /,azim=-90, elev=-90)
+                surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,
+                                       linewidth=0, antialiased=False)
+
+            else:
+                ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
+                p = ax.pcolor(X, Y, Z, antialiased=False, cmap=cm.RdBu)
+                if args.colorbar:
+                    cb = fig.colorbar(p)
+
+            ax.autoscale(tight=True)
+
+        #
+        # Add plot title, labels and legend
+        #
+        if args.title and len(args.title) > 0:
+            ax.set_title(args.title)
+
+        if args.x_label and len(args.x_label) > 0:
+            ax.set_xlabel(args.x_label)
+
+        if args.y_label and len(args.y_label) > 0:
+            ax.set_ylabel(args.y_label)
+
+        if args.legends and len(args.legends) > 0:
+            ax.legend(args.legends.split(","))
+
+        ax_idx = ax_idx + 1
+
 
 #
 # save and/or display figure
