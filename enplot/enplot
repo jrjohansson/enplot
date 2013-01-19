@@ -83,21 +83,19 @@ else:
 #
 
 import matplotlib
-matplotlib.rcParams['font.size'] = 12
-matplotlib.rcParams['font.family'] = 'serif'
-matplotlib.rcParams['text.usetex'] = True
 from matplotlib import pyplot, mpl, cm, rcParams
 from mpl_toolkits.mplot3d import Axes3D
 
-params = {'backend': 'ps',
+params = {'font.family': 'serif',
           'axes.labelsize': 18,
           'text.fontsize': 18,
           'legend.fontsize': 18,
           'xtick.labelsize': 18,
           'ytick.labelsize': 18,
           'text.usetex': True}
-#rcParams.update(params)
+matplotlib.rcParams.update(params)
 import pylab as plt
+
 
 
 #
@@ -186,9 +184,17 @@ else:
                 surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,
                                        linewidth=0, antialiased=False)
 
-            else:
+            elif "pcolor":
                 ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
                 p = ax.pcolor(X, Y, Z, antialiased=False, cmap=cm.RdBu)
+                if args.colorbar:
+                    cb = fig.colorbar(p)
+
+            else:
+                ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
+                p = ax.imshow(Z, cmap=cm.RdBu, origin='lower',
+                              extent=(min(x_range), max(x_range), 
+                                      min(y_range), max(y_range)))
                 if args.colorbar:
                     cb = fig.colorbar(p)
 
