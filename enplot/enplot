@@ -19,6 +19,8 @@ License: LGPL
 # import scipy
 import numpy
 import enplot
+import itertools
+
 
 #
 # Configure and parse the command-line arguments
@@ -67,8 +69,7 @@ args = parser.parse_args()
 #
 # process command-line arguemnts
 #
-style = ["-b", "-g", "-k", "-r"]
-style_no = len(style)
+colorcycler = itertools.cycle(['blue','green','red','magenta','cyan'])
 
 if not args.z:
     xcol = int(args.x) if args.x else -1
@@ -81,9 +82,7 @@ else:
 #
 # Use matplotlib to create the plot
 #
-
 import matplotlib as mpl
-#from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
 params = {'font.family': 'serif',
@@ -96,19 +95,15 @@ params = {'font.family': 'serif',
 mpl.rcParams.update(params)
 import pylab as plt
 
-
-
 #
 # Read and process the data from a files.
 #
-
 if not args.z:
     #
     # 2d plot
     #
     fig, axes = plt.subplots(1, 1, figsize=(8, 6))
 
-    si = 0
     for data_file in args.datafile:
 
         if args.debug:
@@ -122,10 +117,9 @@ if not args.z:
         for i in ycols:
             if i < n:
                 if xcol != -1:
-                    axes.plot(M[:, xcol], M[:, int(i)], style[si % style_no])
+                    axes.plot(M[:, xcol], M[:, int(i)], color=colorcycler.next())
                 else:
-                    axes.plot(M[:, int(i)], style[si % style_no])
-                si = si + 1
+                    axes.plot(M[:, int(i)], color=colorcycler.next())
             else:
                 print "The data file", data_file, ": column", i, "does not exist.", n
 
