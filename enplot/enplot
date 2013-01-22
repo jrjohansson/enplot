@@ -174,15 +174,17 @@ else:
 
             if args.view == "3d":
                 ax = fig.add_subplot(ax_rows, ax_cols, ax_idx, projection='3d') 
-                # /,azim=-90, elev=-90)
-                surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=mpl.cm.jet,
-                                       linewidth=0, antialiased=False)
+                surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+                                       cmap=mpl.cm.jet, linewidth=0,
+                                       antialiased=False)
+                if args.colorbar:
+                    cb = fig.colorbar(surf, ax=ax)
 
             elif "pcolor":
                 ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
                 p = ax.pcolor(X, Y, Z, antialiased=False, cmap=mpl.cm.RdBu)
                 if args.colorbar:
-                    cb = fig.colorbar(p)
+                    cb = fig.colorbar(p, ax=ax)
 
             else:
                 ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
@@ -190,7 +192,7 @@ else:
                               extent=(min(x_range), max(x_range), 
                                       min(y_range), max(y_range)))
                 if args.colorbar:
-                    cb = fig.colorbar(p)
+                    cb = fig.colorbar(p, ax=ax)
 
             ax.autoscale(tight=True)
 
