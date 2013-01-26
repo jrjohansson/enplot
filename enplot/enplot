@@ -173,8 +173,10 @@ else:
                 M = M.T
 
             if args.view == "3d":
-                ax = fig.add_subplot(1, 1, 1, projection='3d') 
-                surf = ax.plot_surface(M, rstride=1, cstride=1, cmap=cm.jet,
+                ax = fig.add_subplot(1, 1, 1, projection='3d')
+                X, Y = numpy.meshgrid(range(m), range(n)) 
+                surf = ax.plot_surface(X, Y, M, rstride=1, cstride=1,
+                                       cmap=cm.jet,
                                        linewidth=0, antialiased=False)
 
             else:
