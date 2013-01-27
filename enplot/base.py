@@ -8,7 +8,6 @@ Requires:
    2) SciPy
    3) matplotlib
 
-
 Robert Johansson <robert@riken.jp>
 License: LGPL
 """
@@ -19,8 +18,7 @@ import os
 import copy
 import sys
 
-debug = 0
-
+debug = False
 
 def data_matrix_sort(M, col):
     """
@@ -61,8 +59,9 @@ def data_matrix_read_file(filename, sep="\t"):
     N = len(elemlist)
     file.close
 
-    if debug != 0:
-        print "Found matrix of size MxN =", M, "x", N
+    if debug:
+        print("Found matrix of size MxN = %dx%d" % (M, N))
+
     mat = zeros((M, N), float)
 
     file = open(filename, "r")
@@ -185,7 +184,7 @@ def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
     m = y_range.size
 
     if debug != 0:
-        print "Building Z [" + str(n) + "x" + str(m) + "]"
+        prin("Building Z [" + str(n) + "x" + str(m) + "]")
 
     Z = np.zeros((m, n), float)
 
