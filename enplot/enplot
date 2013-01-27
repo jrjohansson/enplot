@@ -115,7 +115,7 @@ if not args.z and not args.matrix_form:
     for data_file in args.datafile:
 
         if args.debug:
-            print "Processing data file ", data_file
+            print("Processing data file ", data_file)
 
         M, m, n = enplot.file_data_read(data_file)
 
@@ -129,7 +129,7 @@ if not args.z and not args.matrix_form:
                 else:
                     axes.plot(M[:, int(i)], color=colorcycler.next())
             else:
-                print "The data file", data_file, ": column", i, "does not exist.", n
+                print("The data file", data_file, ": column", i, "does not exist.", n)
 
     #
     # Add plot title, labels and legend
@@ -203,7 +203,7 @@ else:
             for zcol in zcols:
 
                 if args.debug:
-                    print "Processing z column", zcol, "data file ", data_file
+                    print("Processing z column", zcol, "data file ", data_file)
 
                 Z = enplot.build_matrix(M, x_range, y_range, xcol, ycol, zcol)
 
