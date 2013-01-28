@@ -5,14 +5,13 @@ enplot
 enplot: a one-line plot command
 
 enplot use python and matplotlib to provide a simple command-line interface
-that be used to quickly plot data in CSV and related formats.
+that be used to quickly plot data in CSV and related formats. The focus of
+enplot is not publication quanlity plots, but rather quick and easy presentation
+of numerical data. 
 
 
-Examples
-========
-
-Help
-----
+Usage
+=====
 
     $ enplot --help
     usage: enplot [-h] [-t TITLE] [-o OUTPUT_FILE] [-f OUTPUT_FORMAT] [-x X]
@@ -53,6 +52,9 @@ Help
       -v VIEW, --view VIEW  view perspective (top or 3d)
       -c, --colorbar        Show colorbar
 
+
+Examples
+========
 
 Line plots
 ----------

@@ -194,9 +194,6 @@ else:
         else:
             # data in list form
 
-            if args.sort:
-                M = enplot.data_matrix_sort(M, xcol)
-
             x_range = numpy.sort(numpy.unique(M[:, xcol]))
             y_range = numpy.sort(numpy.unique(M[:, ycol]))
 
@@ -217,7 +214,7 @@ else:
 
                 else:
                     ax = fig.add_subplot(ax_rows, ax_cols, ax_idx)
-                    p = ax.pcolor(X, Y, Z, antialiased=False, cmap=cm.RdBu)
+                    p = ax.pcolor(X, Y, Z.T, antialiased=False, cmap=cm.RdBu)
                     if args.colorbar:
                         cb = fig.colorbar(p)
 

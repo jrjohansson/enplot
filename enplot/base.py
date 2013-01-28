@@ -189,8 +189,10 @@ def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
     Z = np.zeros((m, n), float)
 
     for i in range(len(M[:, zcol])):
+
         a = np.nonzero(x_range == M[i, xcol])[0][0]
         b = np.nonzero(y_range == M[i, ycol])[0][0]
+        
         Z[b, a] = M[i, zcol]
 
     return Z
