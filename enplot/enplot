@@ -146,6 +146,8 @@ if not args.z and not args.matrix_form:
     if args.legends and len(args.legends) > 0:
         axes.legend(args.legends.split(","))
 
+    axes.autoscale(tight=True)
+
 else:
     #
     # 3D plots
