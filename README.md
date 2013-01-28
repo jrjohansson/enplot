@@ -1,3 +1,4 @@
+======
 enplot
 ======
 
@@ -6,8 +7,52 @@ enplot: a one-line plot command
 enplot use python and matplotlib to provide a simple command-line interface
 that be used to quickly plot data in CSV and related formats.
 
+
 Examples
---------
+========
+
+Help
+----
+
+    $ enplot --help
+    usage: enplot [-h] [-t TITLE] [-o OUTPUT_FILE] [-f OUTPUT_FORMAT] [-x X]
+                  [-y Y] [-z Z] [-m] [-T] [-X X_LABEL] [-Y Y_LABEL] [-Z Z_LABEL]
+                  [-l LEGENDS] [-s] [-q] [-d] [-v VIEW] [-c]
+                  datafile [datafile ...]
+
+    positional arguments:
+      datafile              a data file in a CSV-like format
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -t TITLE, --title TITLE
+                            plot title
+      -o OUTPUT_FILE, --output-file OUTPUT_FILE
+                            file name for output
+      -f OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                            file format for output
+      -x X                  column index in the data file for use as X variable
+      -y Y                  comma-separated list of column index in the data file
+                            for use as Y variables
+      -z Z                  comma-separated list of column index in the data file
+                            for use as Y variables
+      -m, --matrix-form     data in matrix form
+      -T, --matrix-transpose
+                            transpose data in matrix form
+      -X X_LABEL, --x-label X_LABEL
+                            label for use on X axis
+      -Y Y_LABEL, --y-label Y_LABEL
+                            label for use on Y axis
+      -Z Z_LABEL, --z-label Z_LABEL
+                            label for use on Z axis
+      -l LEGENDS, --legends LEGENDS
+                            comma-separated list of legends
+      -s, --sort            sort the data by the X-axis data points
+      -q, --quiet           do not display plot window
+      -d, --debug           activate debug printouts
+      -v VIEW, --view VIEW  view perspective (top or 3d)
+      -c, --colorbar        Show colorbar
+
 
 Line plots
 ----------
