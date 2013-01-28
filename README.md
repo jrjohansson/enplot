@@ -9,6 +9,9 @@ that be used to quickly plot data in CSV and related formats.
 Examples
 --------
 
+Line plots
+----------
+
 Plot lines corresponding to column data:
 
     $ head -n 4 tests/example-data0.dat 
@@ -21,14 +24,31 @@ Plot lines corresponding to column data:
 
 ![example-data0](https://raw.github.com/jrjohansson/enplot/master/tests/example-data0.png)
 
-Plot 3D data:
+Plot 3D data
+------------
 
-    enplot -x 0 -y 1 -z 2 -c -v 3d -o tests/example-data1.png tests/example-data1.dat
+    enplot -x 0 -y 1 -z 2 -c -v 3d -o tests/example-data1a.png tests/example-data1.dat
 
-![example-data1](https://raw.github.com/jrjohansson/enplot/master/tests/example-data1.png)
+![example-data1a](https://raw.github.com/jrjohansson/enplot/master/tests/example-data1a.png)
 
-Plot 3D data as color map:
 
-    enplot -x 0 -y 1 -z 2 -c tests/example-data1.dat
+Plot 3D data as colormap
+------------------------
 
+    enplot -x 0 -y 1 -z 2 -c -o tests/example-data1b.png tests/example-data1.dat
+
+![example-data1b](https://raw.github.com/jrjohansson/enplot/master/tests/example-data1b.png)
+
+
+Plot matrix data as colormap
+----------------------------
+
+    $ head -3 tests/example-data2.dat 
+    1 0 1 0 1 0 1 0
+    0 1 0 1 0 1 0 1
+    1 0 1 0 1 0 1 0
+    
+    $ enplot -m -c -o tests/example-data2.png tests/example-data2.dat
+
+![example-data2](https://raw.github.com/jrjohansson/enplot/master/tests/example-data2.png)
 
