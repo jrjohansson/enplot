@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 """
-enplot: A plot tool for quickly plotting data in TSV,SSV,CSV formats from the command line.
+enplot: A command-line tool for quickly plotting data in CSV and related
+formats.
 
 Requires:
 
-   1) python
-   2) SciPy
+   1) Python
+   2) NumPy
    3) matplotlib
-
-Purpose:
-
-   To quickly plot a data file from the command line for general inspection.
 
 Robert Johansson <robert@riken.jp>
 License: LGPL
@@ -49,11 +46,11 @@ parser.add_argument("-m", "--matrix-form",
                     help="data in matrix form", action='store_true')
 parser.add_argument("-T", "--matrix-transpose",
                     help="transpose data in matrix form", action='store_true')
-parser.add_argument("-X", "--x-label", 
+parser.add_argument("-X", "--x-label",
                     help="label for use on X axis", type=str)
-parser.add_argument("-Y", "--y-label", 
+parser.add_argument("-Y", "--y-label",
                     help="label for use on Y axis", type=str)
-parser.add_argument("-Z", "--z-label", 
+parser.add_argument("-Z", "--z-label",
                     help="label for use on Z axis", type=str)
 parser.add_argument("-l", "--legends",
                     help="comma-separated list of legends", type=str)
@@ -64,16 +61,16 @@ parser.add_argument("-q", "--quiet", help="do not display plot window",
                     action='store_true', default=False)
 parser.add_argument("-d", "--debug", help="activate debug printouts",
                     action='store_true', default=False)
-parser.add_argument("-v", "--view", 
+parser.add_argument("-v", "--view",
                     help="view perspective (top or 3d)", type=str)
-parser.add_argument("-c", "--colorbar", 
+parser.add_argument("-c", "--colorbar",
                     help="Show colorbar", action='store_true')
 args = parser.parse_args()
 
 #
 # process command-line arguemnts
 #
-colorcycler = itertools.cycle(['blue','green','red','magenta','cyan'])
+colorcycler = itertools.cycle(['blue', 'green', 'red', 'magenta', 'cyan'])
 
 if not args.z:
     xcol = int(args.x) if args.x else -1
@@ -125,11 +122,13 @@ if not args.z and not args.matrix_form:
         for i in ycols:
             if i < n:
                 if xcol != -1:
-                    axes.plot(M[:, xcol], M[:, int(i)], color=colorcycler.next())
+                    axes.plot(
+                        M[:, xcol], M[:, int(i)], color=colorcycler.next())
                 else:
                     axes.plot(M[:, int(i)], color=colorcycler.next())
             else:
-                print("The data file", data_file, ": column", i, "does not exist.", n)
+                print("The data file", data_file,
+                      ": column", i, "does not exist.", n)
 
     #
     # Add plot title, labels and legend
@@ -176,10 +175,10 @@ else:
 
             if args.view == "3d":
                 ax = fig.add_subplot(1, 1, 1, projection='3d')
-                X, Y = numpy.meshgrid(range(m), range(n)) 
+                X, Y = numpy.meshgrid(range(m), range(n))
                 surf = ax.plot_surface(X, Y, M, rstride=1, cstride=1,
                                        cmap=cm.jet,
-                                       linewidth=0, antialiased=False)
+                                       linewidth=0, antialiased=True)
 
             else:
                 ax = fig.add_subplot(1, 1, 1)
@@ -188,8 +187,6 @@ else:
                     cb = fig.colorbar(p, ax=ax)
 
             ax.autoscale(tight=True)
-
-
 
         else:
             # data in list form
@@ -207,9 +204,11 @@ else:
                 Z = enplot.build_matrix(M, x_range, y_range, xcol, ycol, zcol)
 
                 if args.view == "3d":
-                    ax = fig.add_subplot(ax_rows, ax_cols, ax_idx, projection='3d') 
+                    ax = fig.add_subplot(ax_rows, ax_cols, ax_idx,
+                                         projection='3d')
                     # /,azim=-90, elev=-90)
-                    surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,
+                    surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+                                           cmap=cm.jet,
                                            linewidth=0, antialiased=False)
 
                 else:
