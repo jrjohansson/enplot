@@ -241,7 +241,10 @@ else:
 # save and/or display figure
 #
 if args.output_file and len(args.output_file):
-    fig.savefig(args.output_file)
+    if args.output_file:
+        fig.savefig(args.output_file, format=args.output_format)
+    else:
+        fig.savefig(args.output_file)
 
 if not args.quiet:
     plt.show()
