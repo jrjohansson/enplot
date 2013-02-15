@@ -184,7 +184,7 @@ def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
     m = y_range.size
 
     if debug != 0:
-        prin("Building Z [" + str(n) + "x" + str(m) + "]")
+        print("Building Z [" + str(n) + "x" + str(m) + "]")
 
     Z = np.zeros((m, n), float)
 
