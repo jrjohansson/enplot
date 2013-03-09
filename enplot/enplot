@@ -14,10 +14,12 @@ License: LGPL
 """
 
 # import scipy
+import sys
 import numpy
 import enplot
 import itertools
 
+import enplot.version
 
 #
 # Configure and parse the command-line arguments
@@ -26,7 +28,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("datafile",
                     help="a data file in a CSV-like format",
-                    type=str, nargs='+')
+                    type=str, nargs='*')
 parser.add_argument("-t", "--title",
                     help="plot title", type=str)
 parser.add_argument("-o", "--output-file",
@@ -63,9 +65,26 @@ parser.add_argument("-d", "--debug", help="activate debug printouts",
                     action='store_true', default=False)
 parser.add_argument("-v", "--view",
                     help="view perspective (top or 3d)", type=str)
+parser.add_argument("-V", "--version",
+                    help="show version information", action='store_true')
 parser.add_argument("-c", "--colorbar",
                     help="Show colorbar", action='store_true')
 args = parser.parse_args()
+
+#
+#
+#
+if args.version:
+    print "version = %s [%s]" % (enplot.version.version,
+                                 enplot.version.revision)
+    sys.exit(0)
+
+#
+#
+#
+if len(args.datafile) < 1:
+    parser.print_help()
+    sys.exit(0)
 
 #
 # process command-line arguemnts
@@ -112,7 +131,7 @@ if not args.z and not args.matrix_form:
     for data_file in args.datafile:
 
         if args.debug:
-            print("Processing data file ", data_file)
+            print("Processing data file " + data_file)
 
         M, m, n = enplot.file_data_read(data_file)
 
@@ -185,6 +204,7 @@ else:
                 p = ax.pcolor(M, antialiased=False, cmap=cm.RdBu)
                 if args.colorbar:
                     cb = fig.colorbar(p, ax=ax)
+                ax.axis('equal')
 
             ax.autoscale(tight=True)
 
