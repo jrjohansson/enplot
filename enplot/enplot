@@ -170,7 +170,7 @@ else:
     #
     # 3D plots
     #
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(8, 6))
 
     if args.z:
         nax = len(zcols)
@@ -203,8 +203,7 @@ else:
                 ax = fig.add_subplot(1, 1, 1)
                 p = ax.pcolor(M, antialiased=False, cmap=cm.RdBu)
                 if args.colorbar:
-                    cb = fig.colorbar(p, ax=ax)
-                ax.axis('equal')
+                    cb = fig.colorbar(p, ax=ax, fraction=0.05, aspect=30)
 
             ax.autoscale(tight=True)
 
