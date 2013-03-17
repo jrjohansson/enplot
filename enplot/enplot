@@ -56,9 +56,12 @@ parser.add_argument("-Z", "--z-label",
                     help="label for use on Z axis", type=str)
 parser.add_argument("-l", "--legends",
                     help="comma-separated list of legends", type=str)
-parser.add_argument("-s", "--sort",
+parser.add_argument("-S", "--sort",
                     help="sort the data by the X-axis data points",
                     action='store_false')
+parser.add_argument("-s", "--style",
+                    help="graph style ('line', 'bar')",
+                    default='line')
 parser.add_argument("-q", "--quiet", help="do not display plot window",
                     action='store_true', default=False)
 parser.add_argument("-d", "--debug", help="activate debug printouts",
@@ -141,10 +144,22 @@ if not args.z and not args.matrix_form:
         for i in ycols:
             if i < n:
                 if xcol != -1:
-                    axes.plot(
-                        M[:, xcol], M[:, int(i)], color=colorcycler.next())
+                    if args.style == 'line':
+                        axes.plot(M[:, xcol], M[:, int(i)], color=colorcycler.next())
+                    elif args.style == 'bar':
+                        axes.bar(M[:, xcol], M[:, int(i)],
+                                 color=colorcycler.next(), align='center')
+                    else:
+                        raise TypeError("unrecongized plot style (-s argument)")
                 else:
-                    axes.plot(M[:, int(i)], color=colorcycler.next())
+                    if args.style == 'line':
+                        axes.plot(M[:, int(i)], color=colorcycler.next())
+                    elif args.style == 'bar':
+                        axes.bar(np.arange(len(M[:, int(i)])),
+                                 M[:, int(i)],
+                                 color=colorcycler.next(), align='center')
+                    else:
+                        raise TypeError("unrecongized plot style (-s argument)")
             else:
                 print("The data file", data_file,
                       ": column", i, "does not exist.", n)
