@@ -16,8 +16,8 @@ Usage
     $ enplot --help
     usage: enplot [-h] [-t TITLE] [-o OUTPUT_FILE] [-f OUTPUT_FORMAT] [-x X]
                   [-y Y] [-z Z] [-m] [-T] [-X X_LABEL] [-Y Y_LABEL] [-Z Z_LABEL]
-                  [-l LEGENDS] [-s] [-q] [-d] [-v VIEW] [-c]
-                  datafile [datafile ...]
+                  [-l LEGENDS] [-S] [-s STYLE] [-q] [-d] [-v VIEW] [-V] [-c]
+                  [datafile [datafile ...]]
 
     positional arguments:
       datafile              a data file in a CSV-like format
@@ -46,10 +46,13 @@ Usage
                             label for use on Z axis
       -l LEGENDS, --legends LEGENDS
                             comma-separated list of legends
-      -s, --sort            sort the data by the X-axis data points
+      -S, --sort            sort the data by the X-axis data points
+      -s STYLE, --style STYLE
+                            graph style ('line', 'bar')
       -q, --quiet           do not display plot window
       -d, --debug           activate debug printouts
       -v VIEW, --view VIEW  view perspective (top or 3d)
+      -V, --version         show version information
       -c, --colorbar        Show colorbar
 
 
