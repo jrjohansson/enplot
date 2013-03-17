@@ -88,6 +88,16 @@ Plot bars corresponding to column data:
 
 ![example-data3](https://raw.github.com/jrjohansson/enplot/master/tests/example-data3.png)
 
+Fill plots
+----------
+
+Plot filled areas corresponding to column data:
+
+    $ enplot -s fill -x 0 -y 1,2 -X "time" -Y "Probabilities" -o tests/example-data0b.png tests/example-data0.dat
+
+![example-data0b](https://raw.github.com/jrjohansson/enplot/master/tests/example-data0b.png)
+
+
 Plot 3D data
 ------------
 
