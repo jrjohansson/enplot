@@ -121,10 +121,10 @@ params = {'font.family': 'serif',
 matplotlib.rcParams.update(params)
 import pylab as plt
 
+
 #
 # Read and process the data from a files.
 #
-
 if not args.z and not args.matrix_form:
     #
     # 2d plot
@@ -144,22 +144,23 @@ if not args.z and not args.matrix_form:
         for i in ycols:
             if i < n:
                 if xcol != -1:
-                    if args.style == 'line':
-                        axes.plot(M[:, xcol], M[:, int(i)], color=colorcycler.next())
-                    elif args.style == 'bar':
-                        axes.bar(M[:, xcol], M[:, int(i)],
-                                 color=colorcycler.next(), align='center')
-                    else:
-                        raise TypeError("unrecongized plot style (-s argument)")
+                    xdata = M[:, xcol]
+                    ydata = M[:, int(i)]
                 else:
-                    if args.style == 'line':
-                        axes.plot(M[:, int(i)], color=colorcycler.next())
-                    elif args.style == 'bar':
-                        axes.bar(np.arange(len(M[:, int(i)])),
-                                 M[:, int(i)],
-                                 color=colorcycler.next(), align='center')
-                    else:
-                        raise TypeError("unrecongized plot style (-s argument)")
+                    xdata = np.arange(len(M[:, int(i)]))
+                    ydata = M[:, int(i)]
+
+                if args.style == 'line':
+                    axes.plot(xdata, ydata, color=colorcycler.next())
+                elif args.style == 'fill':
+                    axes.fill_between(xdata, ydata, numpy.zeros(ydata.shape),
+                              color=colorcycler.next(), alpha=0.25)
+                elif args.style == 'bar':
+                    axes.bar(xdata, ydata,
+                             color=colorcycler.next(), align='center')
+                else:
+                    raise TypeError("unrecongized plot style (-s argument)")
+
             else:
                 print("The data file", data_file,
                       ": column", i, "does not exist.", n)
