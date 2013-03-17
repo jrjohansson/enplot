@@ -71,6 +71,20 @@ Plot lines corresponding to column data:
 
 ![example-data0](https://raw.github.com/jrjohansson/enplot/master/tests/example-data0.png)
 
+Bar plots
+----------
+
+Plot bars corresponding to column data:
+
+    $ head -n 4 tests/example-data3.dat 
+    1 -3.04
+    2 -3.21
+    3 -0.83
+    4 3.89
+    $ enplot -s bar -x 0 -y 1 -X "Month" -Y "Avg. temperature (C)" -o tests/example-data3.png tests/example-data3.dat
+
+![example-data3](https://raw.github.com/jrjohansson/enplot/master/tests/example-data3.png)
+
 Plot 3D data
 ------------
 
