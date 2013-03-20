@@ -152,6 +152,8 @@ if not args.z and not args.matrix_form:
 
                 if args.style == 'line':
                     axes.plot(xdata, ydata, color=colorcycler.next())
+                elif args.style == 'scatter':
+                    axes.scatter(xdata, ydata, color=colorcycler.next())
                 elif args.style == 'fill':
                     axes.fill_between(xdata, ydata, numpy.zeros(ydata.shape),
                               color=colorcycler.next(), alpha=0.25)
