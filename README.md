@@ -88,6 +88,16 @@ Plot bars corresponding to column data:
 
 ![example-data3](https://raw.github.com/jrjohansson/enplot/master/tests/example-data3.png)
 
+Scatter plots
+-------------
+
+Scatter corresponding to column data:
+
+    $ enplot -s scatter -x 0 -y 1,2 -X "time" -Y "Probabilities" -o tests/example-data0c.png tests/example-data0.dat
+
+![example-data0c](https://raw.github.com/jrjohansson/enplot/master/tests/example-data0c.png)
+
+
 Fill plots
 ----------
 
