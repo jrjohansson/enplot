@@ -48,7 +48,7 @@ Usage
                             comma-separated list of legends
       -S, --sort            sort the data by the X-axis data points
       -s STYLE, --style STYLE
-                            graph style ('line', 'bar')
+                            graph style ('line', 'bar', 'scatter')
       -q, --quiet           do not display plot window
       -d, --debug           activate debug printouts
       -v VIEW, --view VIEW  view perspective (top or 3d)
@@ -93,9 +93,9 @@ Scatter plots
 
 Scatter corresponding to column data:
 
-    $ enplot -s scatter -x 0 -y 1,2 -X "time" -Y "Probabilities" -o tests/example-data0c.png tests/example-data0.dat
+    $ enplot -s scatter -x 0 -y 1,2 -X "X" -Y "Y, Z" -o tests/example-data4.png tests/example-data4.dat
 
-![example-data0c](https://raw.github.com/jrjohansson/enplot/master/tests/example-data0c.png)
+![example-data4](https://raw.github.com/jrjohansson/enplot/master/tests/example-data4.png)
 
 
 Fill plots
