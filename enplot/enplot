@@ -78,8 +78,8 @@ args = parser.parse_args()
 #
 #
 if args.version:
-    print "version = %s [%s]" % (enplot.version.version,
-                                 enplot.version.revision)
+    print("version = %s [%s]" % (enplot.version.version,
+                                 enplot.version.revision))
     sys.exit(0)
 
 #
