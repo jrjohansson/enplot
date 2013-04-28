@@ -151,15 +151,15 @@ if not args.z and not args.matrix_form:
                     ydata = M[:, int(i)]
 
                 if args.style == 'line':
-                    axes.plot(xdata, ydata, color=colorcycler.next())
+                    axes.plot(xdata, ydata, color=next(colorcycler))
                 elif args.style == 'scatter':
-                    axes.scatter(xdata, ydata, color=colorcycler.next())
+                    axes.scatter(xdata, ydata, color=next(colorcycler))
                 elif args.style == 'fill':
                     axes.fill_between(xdata, ydata, numpy.zeros(ydata.shape),
-                              color=colorcycler.next(), alpha=0.25)
+                              color=next(colorcycler), alpha=0.25)
                 elif args.style == 'bar':
                     axes.bar(xdata, ydata,
-                             color=colorcycler.next(), align='center')
+                             color=next(colorcycler), align='center')
                 else:
                     raise TypeError("unrecongized plot style (-s argument)")
 
