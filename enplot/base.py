@@ -181,10 +181,10 @@ def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
     """
 
     if not x_range:
-        x_range = numpy.sort(numpy.unique(M[:, xcol]))
+        x_range = np.sort(numpy.unique(M[:, xcol]))
     
     if not y_range:
-        y_range = numpy.sort(numpy.unique(M[:, ycol]))
+        y_range = np.sort(numpy.unique(M[:, ycol]))
 
     n = x_range.size
     m = y_range.size
@@ -201,6 +201,6 @@ def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
         
         Z[b, a] = M[i, zcol]
 
-    X, Y = numpy.meshgrid(x_range, y_range)
+    X, Y = np.meshgrid(x_range, y_range)
 
     return X, Y, Z
