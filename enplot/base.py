@@ -175,10 +175,16 @@ def file_data_read(datafile, sep=None):
     return data, M, N
 
 
-def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
+def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
     """
     Constuct a matrix representation of data in list format.
     """
+
+    if not x_range:
+        x_range = numpy.sort(numpy.unique(M[:, xcol]))
+    
+    if not y_range:
+        y_range = numpy.sort(numpy.unique(M[:, ycol]))
 
     n = x_range.size
     m = y_range.size
@@ -195,4 +201,6 @@ def build_matrix(M, x_range, y_range, xcol, ycol, zcol):
         
         Z[b, a] = M[i, zcol]
 
-    return Z
+    X, Y = numpy.meshgrid(x_range, y_range)
+
+    return X, Y, Z

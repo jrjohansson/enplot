@@ -228,17 +228,12 @@ else:
         else:
             # data in list form
 
-            x_range = numpy.sort(numpy.unique(M[:, xcol]))
-            y_range = numpy.sort(numpy.unique(M[:, ycol]))
-
-            X, Y = numpy.meshgrid(x_range, y_range)
-
             for zcol in zcols:
 
                 if args.debug:
                     print("Processing z column", zcol, "data file ", data_file)
 
-                Z = enplot.build_matrix(M, x_range, y_range, xcol, ycol, zcol)
+                X, Y, Z = enplot.build_matrix(M, xcol, ycol, zcol)
 
                 if args.view == "3d":
                     ax = fig.add_subplot(ax_rows, ax_cols, ax_idx,
