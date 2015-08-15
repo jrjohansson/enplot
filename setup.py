@@ -47,7 +47,6 @@ setup(
     name=NAME,
     version=VERSION,
     packages=['enplot'],
-    scripts=['enplot/enplot'],
     author="Robert Johansson",
     author_email="jrjohansson@gmail.com",
     license="LGPL",
