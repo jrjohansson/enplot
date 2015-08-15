@@ -1,5 +1,5 @@
 """
 enplot: one-line plotting tool.
 """
-
-from enplot.base import *
+import enplot.version
+from enplot.version import version as __version__

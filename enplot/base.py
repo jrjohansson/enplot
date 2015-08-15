@@ -11,14 +11,11 @@ Requires:
 Robert Johansson <robert@riken.jp>
 License: LGPL
 """
-from scipy import *
 import numpy as np
-
-import os
 import copy
-import sys
 
 debug = False
+
 
 def data_matrix_sort(M, col):
     """
@@ -28,7 +25,7 @@ def data_matrix_sort(M, col):
     MM = copy.copy(M)
 
     v = M[:, col]
-    vv = copy.copy(sort(v))
+    vv = copy.copy(np.sort(v))
 
     for i in range(0, len(vv)):
         for j in range(0, len(vv)):
@@ -62,7 +59,7 @@ def data_matrix_read_file(filename, sep="\t"):
     if debug:
         print("Found matrix of size MxN = %dx%d" % (M, N))
 
-    mat = zeros((M, N), float)
+    mat = np.zeros((M, N), float)
 
     file = open(filename, "r")
     m = 0
@@ -145,7 +142,7 @@ def file_data_read(datafile, sep=None):
     f.seek(0)
 
     if numtype == "complex":
-        data = zeros((M, N), dtype="complex")
+        data = np.zeros((M, N), dtype="complex")
         m = n = 0
         for line in f:
             # skip comment lines
@@ -158,7 +155,7 @@ def file_data_read(datafile, sep=None):
             m += 1
 
     else:
-        data = zeros((M, N), dtype="float")
+        data = np.zeros((M, N), dtype="float")
         m = n = 0
         for line in f:
             # skip comment lines
@@ -182,7 +179,7 @@ def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
 
     if not x_range:
         x_range = np.sort(np.unique(M[:, xcol]))
-    
+
     if not y_range:
         y_range = np.sort(np.unique(M[:, ycol]))
 
@@ -198,7 +195,7 @@ def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
 
         a = np.nonzero(x_range == M[i, xcol])[0][0]
         b = np.nonzero(y_range == M[i, ycol])[0][0]
-        
+
         Z[b, a] = M[i, zcol]
 
     X, Y = np.meshgrid(x_range, y_range)
