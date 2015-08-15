@@ -5,7 +5,7 @@ enplot is a simple plotting tool for quickly visualizing data in CSV and
 related formats. It uses Python/Scipy/matplotlib as backend.
 """
 import os
-from distutils.core import setup
+from setuptools import setup
 
 
 DOCLINES = __doc__.split('\n')
@@ -58,7 +58,7 @@ setup(
     package_data={'enplot': ['*.png'], },
     entry_points={
         'console_scripts': [
-            'enplot = enplot.run.main'
+            'enplot = enplot.run:main'
         ]
     }
 )
