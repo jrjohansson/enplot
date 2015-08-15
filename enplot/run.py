@@ -16,14 +16,15 @@ License: LGPL
 import argparse
 import sys
 import numpy as np
-import enplot
 import itertools
-import enplot.version
 
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
+
+import enplot.version
+import enplot.base
 
 
 def main():
@@ -148,10 +149,10 @@ def main():
             if args.debug:
                 print("Processing data file " + data_file)
 
-            M, m, n = enplot.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file)
 
             if args.sort:
-                M = enplot.data_matrix_sort(M, xcol)
+                M = enplot.base.data_matrix_sort(M, xcol)
 
             for i in ycols:
                 if i < n:
@@ -215,7 +216,7 @@ def main():
         for data_file in args.datafile:
 
             ax_idx = 1
-            M, m, n = enplot.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file)
 
             if args.matrix_form:
                 # data already in matrix form
@@ -246,7 +247,7 @@ def main():
                         print("Processing z column", zcol, "data file ",
                               data_file)
 
-                    X, Y, Z = enplot.build_matrix(M, xcol, ycol, zcol)
+                    X, Y, Z = enplot.base.build_matrix(M, xcol, ycol, zcol)
 
                     if args.view == "3d":
                         ax = fig.add_subplot(ax_rows, ax_cols, ax_idx,
