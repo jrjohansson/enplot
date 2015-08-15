@@ -72,6 +72,9 @@ parser.add_argument("-V", "--version",
                     help="show version information", action='store_true')
 parser.add_argument("-c", "--colorbar",
                     help="Show colorbar", action='store_true')
+parser.add_argument('--mplstyle',
+                    help="Matplotlib style sheet to apply to the plot.",
+                    default=None)
 args = parser.parse_args()
 
 #
@@ -120,6 +123,12 @@ params = {'font.family': 'serif',
           'text.usetex': True}
 matplotlib.rcParams.update(params)
 import pylab as plt
+
+#
+# If a matplotlib stylesheet is specified, apply it now.
+#
+if args.mplstyle is not None:
+    plt.style.use(args.mplstyle)
 
 
 #
