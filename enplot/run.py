@@ -293,3 +293,7 @@ def main():
 
     if not args.quiet:
         plt.show()
+
+
+if __name__ == "__main__":
+    main()
