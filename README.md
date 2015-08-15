@@ -111,7 +111,7 @@ Plot filled areas corresponding to column data:
 Plot 3D data
 ------------
 
-    enplot -x 0 -y 1 -z 2 -c -v 3d -o tests/example-data1a.png tests/example-data1.dat
+    $ enplot -x 0 -y 1 -z 2 -c -v 3d -o tests/example-data1a.png tests/example-data1.dat
 
 ![example-data1a](https://raw.github.com/jrjohansson/enplot/master/tests/example-data1a.png)
 
@@ -119,7 +119,7 @@ Plot 3D data
 Plot 3D data as colormap
 ------------------------
 
-    enplot -x 0 -y 1 -z 2 -c -o tests/example-data1b.png tests/example-data1.dat
+    $ enplot -x 0 -y 1 -z 2 -c -o tests/example-data1b.png tests/example-data1.dat
 
 ![example-data1b](https://raw.github.com/jrjohansson/enplot/master/tests/example-data1b.png)
 
