@@ -122,7 +122,6 @@ def main():
     params = {'font.family': 'serif',
               'font.size': 16,
               'axes.labelsize': 18,
-              'text.fontsize': 18,
               'legend.fontsize': 18,
               'xtick.labelsize': 18,
               'ytick.labelsize': 18,
