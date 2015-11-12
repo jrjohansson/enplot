@@ -80,7 +80,7 @@ def data_matrix_read_file(filename, sep="\t"):
     return mat, N, M
 
 
-def file_data_read(datafile, sep=None):
+def file_data_read(datafile, sep=None, usenp=False):
     """
     Read data from a field-separated values text file (by default tab
     separated, but the separator can be changed by the optional second
@@ -89,7 +89,12 @@ def file_data_read(datafile, sep=None):
 
     if datafile is None:
         raise ValueError("datafile is unspecified")
-
+    if usenp:
+	data = np.genfromtxt(datafile, delimiter=sep, dtype=None)
+	M = len(data)
+	N = len(data.dtype)
+	return data, M, N
+    
     f = open(datafile, "r")
 
     #
