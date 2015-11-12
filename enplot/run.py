@@ -148,7 +148,7 @@ def main():
             if args.debug:
                 print("Processing data file " + data_file)
 
-            M, m, n = enplot.base.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file, usenp=True)
 
             if args.sort:
                 M = enplot.base.data_matrix_sort(M, xcol)
