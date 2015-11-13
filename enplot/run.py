@@ -68,7 +68,7 @@ def main():
                         help="comma-separated list of legends", type=str)
     parser.add_argument("-S", "--sort",
                         help="sort the data by the X-axis data points",
-                        action='store_false')
+                        action='store_true')
     parser.add_argument("-s", "--style",
                         help="graph style ('line', 'bar')",
                         default='line')

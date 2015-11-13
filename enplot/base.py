@@ -89,12 +89,6 @@ def file_data_read(datafile, sep=None, usenp=False):
 
     if datafile is None:
         raise ValueError("datafile is unspecified")
-    if usenp:
-	data = np.genfromtxt(datafile, delimiter=sep, dtype=None)
-	M = len(data)
-	N = len(data.dtype)
-	return data, M, N
-    
     f = open(datafile, "r")
 
     #
@@ -140,6 +134,12 @@ def file_data_read(datafile, sep=None, usenp=False):
             raise ValueError(
                 "Badly formatted data file: unequal number of columns")
         M += 1
+
+    if usenp:
+	f.close()
+	data = np.genfromtxt(datafile, delimiter=sep)
+	M, N = data.shape
+	return data, M, N
 
     #
     # read data and store in a matrix
