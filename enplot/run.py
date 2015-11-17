@@ -53,6 +53,12 @@ def main():
                         help=("comma-separated list of column index in " +
                               "the data file for use as Y variables"),
                         type=str)
+    parser.add_argument("-xlog",
+			help=("plot using log of the values in x-axis"),
+			action='store_true', default=False)
+    parser.add_argument("-ylog",
+			help=("plot using log of the values in y-axis"),
+			action='store_true', default=False)
     parser.add_argument("-m", "--matrix-form",
                         help="data in matrix form", action='store_true')
     parser.add_argument("-T", "--matrix-transpose",
@@ -161,7 +167,10 @@ def main():
                     else:
                         xdata = np.arange(len(M[:, int(i)]))
                         ydata = M[:, int(i)]
-
+		    if args.xlog:
+			xdata = np.log10(xdata)
+		    if args.ylog:
+			ydata = np.log10(ydata)
                     if args.style == 'line':
                         axes.plot(xdata, ydata, color=next(colorcycler))
                     elif args.style == 'scatter':
