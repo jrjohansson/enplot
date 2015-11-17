@@ -53,10 +53,10 @@ def main():
                         help=("comma-separated list of column index in " +
                               "the data file for use as Y variables"),
                         type=str)
-    parser.add_argument("-xlog",
+    parser.add_argument("-logx",
 			help=("plot using log of the values in x-axis"),
 			action='store_true', default=False)
-    parser.add_argument("-ylog",
+    parser.add_argument("-logy",
 			help=("plot using log of the values in y-axis"),
 			action='store_true', default=False)
     parser.add_argument("-m", "--matrix-form",
@@ -167,9 +167,9 @@ def main():
                     else:
                         xdata = np.arange(len(M[:, int(i)]))
                         ydata = M[:, int(i)]
-		    if args.xlog:
+		    if args.logx:
 			xdata = np.log10(xdata)
-		    if args.ylog:
+		    if args.logy:
 			ydata = np.log10(ydata)
                     if args.style == 'line':
                         axes.plot(xdata, ydata, color=next(colorcycler))
