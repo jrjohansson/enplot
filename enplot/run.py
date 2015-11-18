@@ -286,7 +286,7 @@ def main():
                 ax.set_ylabel(args.y_label)
 
             if args.legends and len(args.legends) > 0:
-                ax.legend(args.legends.split(","))
+                ax.legend(args.legends.split(","), loc='best')
 
             ax_idx = ax_idx + 1
 
@@ -294,7 +294,7 @@ def main():
     # save and/or display figure
     #
     if args.output_file and len(args.output_file):
-        if args.output_file:
+        if args.output_format and len(args.output_format):
             fig.savefig(args.output_file, format=args.output_format)
         else:
             fig.savefig(args.output_file)
