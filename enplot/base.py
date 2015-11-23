@@ -22,21 +22,11 @@ def data_matrix_sort(M, col):
     Sort the columns in a given matrix according to give column.
     """
 
-    MM = copy.copy(M)
+    isort = M[:, col].argsort()
+    for i in np.arange(M.shape[1]):
+	M[:,i] = M[:,i][isort]    
 
-    v = M[:, col]
-    vv = copy.copy(np.sort(v))
-
-    for i in range(0, len(vv)):
-        for j in range(0, len(vv)):
-            if M[j, col] != vv[i]:
-                j += 1
-            else:
-                break
-
-            MM[i, :] = M[j, :]
-
-    return MM
+    return M
 
 
 def data_matrix_read_file(filename, sep="\t"):
@@ -80,7 +70,7 @@ def data_matrix_read_file(filename, sep="\t"):
     return mat, N, M
 
 
-def file_data_read(datafile, sep=None, usenp=False):
+def file_data_read(datafile, sep=None, header=0):
     """
     Read data from a field-separated values text file (by default tab
     separated, but the separator can be changed by the optional second
@@ -91,91 +81,33 @@ def file_data_read(datafile, sep=None, usenp=False):
         raise ValueError("datafile is unspecified")
     f = open(datafile, "r")
 
-    #
-    # first count lines and numbers of
-    #
-    M = N = 0
+    i_header=0
+    sep = ""
     for line in f:
-        # skip comment lines
-        if line[0] == '#' or line[0] == '%':
-            continue
-        # find delim
-        if N == 0 and sep is None:
-            if len(line.rstrip().split(",")) > 1:
-                sep = ","
-            elif len(line.rstrip().split(";")) > 1:
-                sep = ";"
-            elif len(line.rstrip().split(":")) > 1:
-                sep = ":"
-            elif len(line.rstrip().split("|")) > 1:
-                sep = "|"
-            elif len(line.rstrip().split()) > 1:
-                sep = None  # for a mix of white space deliminators
-            else:
-                raise ValueError("Unrecognized column deliminator")
-        # split the line
-        line_vec = line.split(sep)
-        n = len(line_vec)
-        if N == 0 and n > 0:
-            N = n
-            # check type
-            if ("j" in line_vec[0]) or ("i" in line_vec[0]):
-                numtype = "complex"
-            else:
-                numtype = "real"
-
-            # check format
-            if ("e" in line_vec[0]) or ("E" in line_vec[0]):
-                numformat = "exp"
-            else:
-                numformat = "decimal"
-
-        elif N != n:
-            raise ValueError(
-                "Badly formatted data file: unequal number of columns")
-        M += 1
-
-    if usenp:
-	f.close()
-	data = np.genfromtxt(datafile, delimiter=sep)
-	M, N = data.shape
-	return data, M, N
-
-    #
-    # read data and store in a matrix
-    #
-    f.seek(0)
-
-    if numtype == "complex":
-        data = np.zeros((M, N), dtype="complex")
-        m = n = 0
-        for line in f:
-            # skip comment lines
-            if line[0] == '#' or line[0] == '%':
-                continue
-            n = 0
-            for item in line.rstrip().split(sep):
-                data[m, n] = complex(item)
-                n += 1
-            m += 1
-
-    else:
-        data = np.zeros((M, N), dtype="float")
-        m = n = 0
-        for line in f:
-            # skip comment lines
-            if line[0] == '#' or line[0] == '%':
-                continue
-            n = 0
-            for item in line.rstrip().split(sep):
-                data[m, n] = float(item)
-                n += 1
-            m += 1
+        # skip header lines
+	if i_header <= header:
+	    i_header += 1
+	else:
+	    if line[0] != '#' and line[0] != '%':
+		if sep == "":
+		    if len(line.rstrip().split(",")) > 1:
+			sep = ","
+		    elif len(line.rstrip().split(";")) > 1:
+			sep = ";"
+		    elif len(line.rstrip().split(":")) > 1:
+			sep = ":"
+		    elif len(line.rstrip().split("|")) > 1:
+			sep = "|"
+		    elif len(line.rstrip().split()) > 1:
+			sep = None  # for a mix of white space deliminators
+		    else:
+			raise ValueError("Unrecognized column deliminator")
+		break
 
     f.close()
-
+    data = np.genfromtxt(datafile, delimiter=sep, skip_header=header)
+    M, N = data.shape
     return data, M, N
-
 
 def build_matrix(M, xcol, ycol, zcol, x_range=None, y_range=None):
     """

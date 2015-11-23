@@ -53,12 +53,15 @@ def main():
                         help=("comma-separated list of column index in " +
                               "the data file for use as Y variables"),
                         type=str)
-    parser.add_argument("-logx",
+    parser.add_argument("--log-x",
 			help=("plot using log of the values in x-axis"),
 			action='store_true', default=False)
-    parser.add_argument("-logy",
+    parser.add_argument("--log-y",
 			help=("plot using log of the values in y-axis"),
 			action='store_true', default=False)
+    parser.add_argument("-H", "--header",
+                        help="Number of header lines to ignore",
+                        type=int, default=0)    
     parser.add_argument("-m", "--matrix-form",
                         help="data in matrix form", action='store_true')
     parser.add_argument("-T", "--matrix-transpose",
@@ -154,7 +157,8 @@ def main():
             if args.debug:
                 print("Processing data file " + data_file)
 
-            M, m, n = enplot.base.file_data_read(data_file, usenp=True)
+            M, m, n = enplot.base.file_data_read(data_file,
+						 header=args.header)
 
             if args.sort:
                 M = enplot.base.data_matrix_sort(M, xcol)
@@ -167,9 +171,9 @@ def main():
                     else:
                         xdata = np.arange(len(M[:, int(i)]))
                         ydata = M[:, int(i)]
-		    if args.logx:
+		    if args.log_x:
 			xdata = np.log10(xdata)
-		    if args.logy:
+		    if args.log_y:
 			ydata = np.log10(ydata)
                     if args.style == 'line':
                         axes.plot(xdata, ydata, color=next(colorcycler))
@@ -224,7 +228,8 @@ def main():
         for data_file in args.datafile:
 
             ax_idx = 1
-            M, m, n = enplot.base.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file,
+						 header=args.header)
 
             if args.matrix_form:
                 # data already in matrix form
