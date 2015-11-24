@@ -53,6 +53,10 @@ def main():
                         help=("comma-separated list of column index in " +
                               "the data file for use as Y variables"),
                         type=str)
+    parser.add_argument("-C",
+                        help=("column index in the data file " +
+                              "for use as color code"),
+                        type=str, default=-1)
     parser.add_argument("--log-x",
 			help=("plot using log of the values in x-axis"),
 			action='store_true', default=False)
@@ -165,6 +169,7 @@ def main():
 
             for i in ycols:
                 if i < n:
+		    colors = next(colorcycler)
                     if xcol != -1:
                         xdata = M[:, xcol]
                         ydata = M[:, int(i)]
@@ -174,15 +179,17 @@ def main():
 		    if args.log_x:
 			xdata = np.log10(xdata)
 		    if args.log_y:
-			ydata = np.log10(ydata)
+			ydata = np.log10(ydata)			
                     if args.style == 'line':
-                        axes.plot(xdata, ydata, color=next(colorcycler))
+                        axes.plot(xdata, ydata, color=colors)
                     elif args.style == 'scatter':
-                        axes.scatter(xdata, ydata, color=next(colorcycler))
+			if args.C != -1:
+			    colors = M[:, args.C]
+                        p = axes.scatter(xdata, ydata, c=colors, edgecolor="none")
                     elif args.style == 'fill':
                         axes.fill_between(
                             xdata, ydata, np.zeros(ydata.shape),
-                            color=next(colorcycler), alpha=0.25)
+                            color=colors, alpha=0.25)
                     elif args.style == 'bar':
                         axes.bar(xdata, ydata,
                                  color=next(colorcycler), align='center')
@@ -208,6 +215,9 @@ def main():
 
         if args.legends and len(args.legends) > 0:
             axes.legend(args.legends.split(","))
+
+	if args.colorbar and args.C != -1:
+	    fig.colorbar(p, ax=axes, fraction=0.05, aspect=30)
 
         axes.autoscale(tight=True)
 

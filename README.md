@@ -16,7 +16,7 @@ Usage
     $ enplot --help
     usage: enplot [-h] [-t TITLE] [-o OUTPUT_FILE] [-f OUTPUT_FORMAT] [-x X]
                   [-y Y] [-z Z] [-m] [-T] [-X X_LABEL] [-Y Y_LABEL] [-Z Z_LABEL]
-                  [--log-x] [--log-y] [-H HEADER]  
+                  [-C C] [--log-x] [--log-y] [-H HEADER]  
                   [-l LEGENDS] [-S] [-s STYLE] [-q] [-d] [-v VIEW] [-V] [-c]
                   [datafile [datafile ...]]
 
@@ -36,6 +36,7 @@ Usage
                             for use as Y variables
       -z Z                  comma-separated list of column index in the data file
                             for use as Y variables
+      -C C                  column index in the data file for use as color code
       --log-x               plot using log of the values in x-axis
       --log-y               plot using log of the values in y-axis
       -H HEADER, --header HEADER
