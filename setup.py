@@ -17,8 +17,8 @@ Operating System :: Unix
 """
 NAME = "enplot"
 MAJOR = 1
-MINOR = 0
-MICRO = 1
+MINOR = 1
+MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 REVISION = 0 + int(os.popen("git rev-list --all | wc -l").read())

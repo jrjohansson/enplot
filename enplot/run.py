@@ -53,6 +53,19 @@ def main():
                         help=("comma-separated list of column index in " +
                               "the data file for use as Y variables"),
                         type=str)
+    parser.add_argument("-C",
+                        help=("column index in the data file " +
+                              "for use as color code"),
+                        type=str, default=-1)
+    parser.add_argument("--log-x",
+			help=("plot using log of the values in x-axis"),
+			action='store_true', default=False)
+    parser.add_argument("--log-y",
+			help=("plot using log of the values in y-axis"),
+			action='store_true', default=False)
+    parser.add_argument("-H", "--header",
+                        help="Number of header lines to ignore",
+                        type=int, default=0)    
     parser.add_argument("-m", "--matrix-form",
                         help="data in matrix form", action='store_true')
     parser.add_argument("-T", "--matrix-transpose",
@@ -68,7 +81,7 @@ def main():
                         help="comma-separated list of legends", type=str)
     parser.add_argument("-S", "--sort",
                         help="sort the data by the X-axis data points",
-                        action='store_false')
+                        action='store_true')
     parser.add_argument("-s", "--style",
                         help="graph style ('line', 'bar')",
                         default='line')
@@ -148,28 +161,35 @@ def main():
             if args.debug:
                 print("Processing data file " + data_file)
 
-            M, m, n = enplot.base.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file,
+						 header=args.header)
 
             if args.sort:
                 M = enplot.base.data_matrix_sort(M, xcol)
 
             for i in ycols:
                 if i < n:
+		    colors = next(colorcycler)
                     if xcol != -1:
                         xdata = M[:, xcol]
                         ydata = M[:, int(i)]
                     else:
                         xdata = np.arange(len(M[:, int(i)]))
                         ydata = M[:, int(i)]
-
+		    if args.log_x:
+			xdata = np.log10(xdata)
+		    if args.log_y:
+			ydata = np.log10(ydata)			
                     if args.style == 'line':
-                        axes.plot(xdata, ydata, color=next(colorcycler))
+                        axes.plot(xdata, ydata, color=colors)
                     elif args.style == 'scatter':
-                        axes.scatter(xdata, ydata, color=next(colorcycler))
+			if args.C != -1:
+			    colors = M[:, args.C]
+                        p = axes.scatter(xdata, ydata, c=colors, edgecolor="none")
                     elif args.style == 'fill':
                         axes.fill_between(
                             xdata, ydata, np.zeros(ydata.shape),
-                            color=next(colorcycler), alpha=0.25)
+                            color=colors, alpha=0.25)
                     elif args.style == 'bar':
                         axes.bar(xdata, ydata,
                                  color=next(colorcycler), align='center')
@@ -196,6 +216,9 @@ def main():
         if args.legends and len(args.legends) > 0:
             axes.legend(args.legends.split(","))
 
+	if args.colorbar and args.C != -1:
+	    fig.colorbar(p, ax=axes, fraction=0.05, aspect=30)
+
         axes.autoscale(tight=True)
 
     else:
@@ -215,7 +238,8 @@ def main():
         for data_file in args.datafile:
 
             ax_idx = 1
-            M, m, n = enplot.base.file_data_read(data_file)
+            M, m, n = enplot.base.file_data_read(data_file,
+						 header=args.header)
 
             if args.matrix_form:
                 # data already in matrix form
@@ -277,7 +301,7 @@ def main():
                 ax.set_ylabel(args.y_label)
 
             if args.legends and len(args.legends) > 0:
-                ax.legend(args.legends.split(","))
+                ax.legend(args.legends.split(","), loc='best')
 
             ax_idx = ax_idx + 1
 
@@ -285,7 +309,7 @@ def main():
     # save and/or display figure
     #
     if args.output_file and len(args.output_file):
-        if args.output_file:
+        if args.output_format and len(args.output_format):
             fig.savefig(args.output_file, format=args.output_format)
         else:
             fig.savefig(args.output_file)
