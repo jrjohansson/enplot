@@ -24,7 +24,7 @@ def data_matrix_sort(M, col):
 
     isort = M[:, col].argsort()
     for i in np.arange(M.shape[1]):
-	M[:,i] = M[:,i][isort]    
+        M[:,i] = M[:,i][isort]    
 
     return M
 
@@ -85,24 +85,24 @@ def file_data_read(datafile, sep=None, header=0):
     sep = ""
     for line in f:
         # skip header lines
-	if i_header <= header:
-	    i_header += 1
-	else:
-	    if line[0] != '#' and line[0] != '%':
-		if sep == "":
-		    if len(line.rstrip().split(",")) > 1:
-			sep = ","
-		    elif len(line.rstrip().split(";")) > 1:
-			sep = ";"
-		    elif len(line.rstrip().split(":")) > 1:
-			sep = ":"
-		    elif len(line.rstrip().split("|")) > 1:
-			sep = "|"
-		    elif len(line.rstrip().split()) > 1:
-			sep = None  # for a mix of white space deliminators
-		    else:
-			raise ValueError("Unrecognized column deliminator")
-		break
+        if i_header <= header:
+            i_header += 1
+        else:
+            if line[0] != '#' and line[0] != '%':
+                if sep == "":
+                    if len(line.rstrip().split(",")) > 1:
+                        sep = ","
+                    elif len(line.rstrip().split(";")) > 1:
+                        sep = ";"
+                    elif len(line.rstrip().split(":")) > 1:
+                        sep = ":"
+                    elif len(line.rstrip().split("|")) > 1:
+                        sep = "|"
+                    elif len(line.rstrip().split()) > 1:
+                        sep = None  # for a mix of white space deliminators
+                    else:
+                        raise ValueError("Unrecognized column deliminator")
+                break
 
     f.close()
     data = np.genfromtxt(datafile, delimiter=sep, skip_header=header)

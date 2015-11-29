@@ -58,11 +58,11 @@ def main():
                               "for use as color code"),
                         type=str, default=-1)
     parser.add_argument("--log-x",
-			help=("plot using log of the values in x-axis"),
-			action='store_true', default=False)
+                        help=("plot using log of the values in x-axis"),
+                        action='store_true', default=False)
     parser.add_argument("--log-y",
-			help=("plot using log of the values in y-axis"),
-			action='store_true', default=False)
+                        help=("plot using log of the values in y-axis"),
+                        action='store_true', default=False)
     parser.add_argument("-H", "--header",
                         help="Number of header lines to ignore",
                         type=int, default=0)    
@@ -162,29 +162,29 @@ def main():
                 print("Processing data file " + data_file)
 
             M, m, n = enplot.base.file_data_read(data_file,
-						 header=args.header)
+                                                 header=args.header)
 
             if args.sort:
                 M = enplot.base.data_matrix_sort(M, xcol)
 
             for i in ycols:
                 if i < n:
-		    colors = next(colorcycler)
+                    colors = next(colorcycler)
                     if xcol != -1:
                         xdata = M[:, xcol]
                         ydata = M[:, int(i)]
                     else:
                         xdata = np.arange(len(M[:, int(i)]))
                         ydata = M[:, int(i)]
-		    if args.log_x:
-			xdata = np.log10(xdata)
-		    if args.log_y:
-			ydata = np.log10(ydata)			
+                    if args.log_x:
+                        xdata = np.log10(xdata)
+                    if args.log_y:
+                        ydata = np.log10(ydata)                        
                     if args.style == 'line':
                         axes.plot(xdata, ydata, color=colors)
                     elif args.style == 'scatter':
-			if args.C != -1:
-			    colors = M[:, args.C]
+                        if args.C != -1:
+                            colors = M[:, args.C]
                         p = axes.scatter(xdata, ydata, c=colors, edgecolor="none")
                     elif args.style == 'fill':
                         axes.fill_between(
@@ -216,8 +216,8 @@ def main():
         if args.legends and len(args.legends) > 0:
             axes.legend(args.legends.split(","))
 
-	if args.colorbar and args.C != -1:
-	    fig.colorbar(p, ax=axes, fraction=0.05, aspect=30)
+        if args.colorbar and args.C != -1:
+            fig.colorbar(p, ax=axes, fraction=0.05, aspect=30)
 
         axes.autoscale(tight=True)
 
@@ -239,7 +239,7 @@ def main():
 
             ax_idx = 1
             M, m, n = enplot.base.file_data_read(data_file,
-						 header=args.header)
+                                                 header=args.header)
 
             if args.matrix_form:
                 # data already in matrix form
